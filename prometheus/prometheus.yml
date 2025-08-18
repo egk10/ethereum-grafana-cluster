@@ -160,17 +160,7 @@ scrape_configs:
       - target_label: service_type
         replacement: 'dvt-middleware'
 
-  - job_name: 'nodeset-stakewise-operator'
-    static_configs:
-      - targets: ['minipcamd3.velociraptor-scylla.ts.net:8180']
-    scrape_interval: 30s
-    relabel_configs:
-      - target_label: node_name
-        replacement: 'nodeset'
-      - target_label: protocol
-        replacement: 'stakewise'
-      - target_label: service_type
-        replacement: 'stakewise-operator'
+  # ===== FEDERATION CONFIGS (These are working great!) =====
 
   - job_name: 'nodeset-hyperdrive'
     static_configs:
@@ -369,6 +359,7 @@ scrape_configs:
         - '{__name__=~"hyperdrive_.*"}'
         - '{__name__=~"nodeset_.*"}'
         - '{__name__=~"stakewise_.*"}'
+        - '{__name__=~"sw_.*"}'
         - '{__name__=~"sw_.*"}'
         - '{__name__=~"mevboost_.*"}'
         - '{__name__=~"mev_boost_.*"}'
