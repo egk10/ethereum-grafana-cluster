@@ -1,0 +1,78 @@
+services:
+  validator-prometheus:
+    image: prom/prometheus:latest
+    container_name: validator-prometheus
+    ports:
+      - "9091:9090"  # Different port to avoid conflict
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules:/etc/prometheus/rules
+      - validator_prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - validator-net
+
+  validator-grafana:
+    image: grafana/grafana:latest
+    container_name: validator-grafana
+    ports:
+      - "3000:3000"  # Standard port, not conflicting
+    volumes:
+      - validator_grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=validator123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_SERVE_FROM_SUB_PATH=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    restart: unless-stopped
+    networks:
+      - validator-net
+    depends_on:
+      - validator-prometheus
+
+  validator-node-exporter:
+    image: prom/node-exporter:latest
+    container_name: validator-node-exporter
+    ports:
+      - "9102:9100"  # Different port to avoid conflict with existing
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    networks:
+      - validator-net
+
+  ethereum-metrics:
+    image: ethpandaops/ethereum-metrics-exporter:latest
+    container_name: ethereum-metrics
+    ports:
+      - "9093:9090"  # Unique port for ethereum metrics
+    volumes:
+      - ./ethereum-metrics/config.yaml:/config.yaml
+    command: ["--config", "/config.yaml"]
+    restart: unless-stopped
+    networks:
+      - validator-net
+
+networks:
+  validator-net:
+    driver: bridge
+
+volumes:
+  validator_prometheus_data:
+  validator_grafana_data:

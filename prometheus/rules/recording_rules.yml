@@ -1,0 +1,149 @@
+# /etc/prometheus/rules/recording_rules.yml
+groups:
+- name: validator.recording
+  interval: 30s
+  rules:
+  # Validator effectiveness rate calculation
+  - record: validator:effectiveness_rate
+    expr: |
+      (
+        sum(rate(validator_duties_performed_total[1h])) by (node_name, protocol) /
+        sum(rate(validator_duties_total[1h])) by (node_name, protocol)
+      ) * 100
+
+  # Alternative calculation if above metrics don't exist
+  - record: validator:effectiveness_rate_alt
+    expr: |
+      (
+        sum(rate(beacon_validator_attestations_total[1h])) by (node_name, protocol) /
+        sum(rate(beacon_validator_attestations_expected_total[1h])) by (node_name, protocol)
+      ) * 100
+
+  # Attestation success rate per node
+  - record: validator:attestation_success_rate
+    expr: |
+      (
+        1 - (
+          sum(rate(validator_attestation_missed_total[1h])) by (node_name, protocol) /
+          sum(rate(validator_attestation_total[1h])) by (node_name, protocol)
+        )
+      ) * 100
+
+  # Proposal success rate when selected
+  - record: validator:proposal_success_rate
+    expr: |
+      (
+        sum(rate(validator_proposal_success_total[1h])) by (node_name, protocol) /
+        sum(rate(validator_proposal_total[1h])) by (node_name, protocol)
+      ) * 100
+
+  # Average inclusion distance
+  - record: validator:avg_inclusion_distance
+    expr: avg(validator_inclusion_distance) by (node_name, protocol)
+
+  # Node CPU utilization percentage
+  - record: node:cpu_utilization_percent
+    expr: |
+      100 - (
+        avg by (instance, node_name) (
+          irate(node_cpu_seconds_total{mode="idle"}[5m])
+        ) * 100
+      )
+
+  # Node memory utilization percentage
+  - record: node:memory_utilization_percent
+    expr: |
+      (
+        1 - (
+          node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes
+        )
+      ) * 100
+
+  # Node disk utilization percentage
+  - record: node:disk_utilization_percent
+    expr: |
+      (
+        1 - (
+          node_filesystem_avail_bytes{mountpoint="/"} / 
+          node_filesystem_size_bytes{mountpoint="/"}
+        )
+      ) * 100
+
+  # Protocol validator count
+  - record: protocol:validator_count
+    expr: count by (protocol) (up{job=~".*-federation"} == 1)
+
+  # Cluster total effectiveness
+  - record: cluster:total_effectiveness
+    expr: avg(validator:effectiveness_rate)
+
+  # DVT vs Solo performance comparison
+  - record: dvt:performance_vs_solo
+    expr: |
+      avg(validator:effectiveness_rate{dvt_enabled="true"}) / 
+      avg(validator:effectiveness_rate{dvt_enabled!="true"})
+
+  # Client diversity metrics
+  - record: client:consensus_diversity
+    expr: count by (client_cl) (count by (client_cl, node_name) (up{job=~".*-federation"}))
+
+  - record: client:execution_diversity
+    expr: count by (client_el) (count by (client_el, node_name) (up{job=~".*-federation"}))
+
+  # Peer count stability
+  - record: node:peer_count_avg
+    expr: avg_over_time(libp2p_peers[5m])
+
+  # Sync status health
+  - record: node:sync_health
+    expr: (beacon_head_slot - beacon_finalized_slot) < 64
+
+  # MEV performance tracking
+  - record: mev:relay_performance
+    expr: rate(mevboost_requests_total[5m])
+
+  # Time synchronization health
+  - record: node:time_sync_health
+    expr: abs(node_timex_offset_seconds) < 0.1
+
+  # Validator balance change rate (rewards)
+  - record: validator:balance_change_rate
+    expr: rate(validator_balance_gwei[1h])
+
+  # Network participation rate
+  - record: network:participation_rate
+    expr: avg(beacon_current_active_validators / beacon_current_total_validators) * 100
+
+  # Slashing risk indicators (should always be 0)
+  - record: validator:slashing_risk
+    expr: rate(validator_slashing_total[24h])
+
+- name: performance.hourly
+  interval: 1h
+  rules:
+  # Hourly aggregated effectiveness
+  - record: validator:effectiveness_1h
+    expr: avg_over_time(validator:effectiveness_rate[1h])
+
+  # Hourly reward rate
+  - record: validator:reward_rate_1h
+    expr: avg_over_time(validator:balance_change_rate[1h])
+
+  # Hourly missed duties count
+  - record: validator:missed_duties_1h
+    expr: increase(validator_duties_missed_total[1h])
+
+- name: performance.daily
+  interval: 24h
+  rules:
+  # Daily aggregated performance
+  - record: validator:effectiveness_24h
+    expr: avg_over_time(validator:effectiveness_rate[24h])
+
+  # Daily APR calculation (approximate)
+  - record: validator:apr_estimate_24h
+    expr: (validator:reward_rate_1h * 24 * 365) / 32000000000 * 100
+
+  # Daily uptime percentage
+  - record: node:uptime_24h
+    expr: avg_over_time(up[24h]) * 100

@@ -1,0 +1,51 @@
+global:
+  logging: "info"
+  metricsAddr: ":9090"
+  namespace: eth_validator
+  checkInterval: 60s
+
+# Disable execution client (not available locally)
+execution:
+  enabled: false
+
+# Beaconcha.in API configuration
+beaconchain:
+  endpoint: "https://beaconcha.in/api/v1"
+  timeout: 30s
+
+# Your actual validator public keys (you need to add these)
+validators:
+  # Rocketpool validator (minitx node)
+  - pubkey: "0x94b0b174c018163d04314d21431d910c7f30611f29423ae7fbb65587c7642509ee998f9baa4529e9fbabcf86733619a5"
+    labels:
+      protocol: "rocketpool"
+      node: "minitx"
+      client: "teku"
+
+  # Etherfi validator (orangepi5-plus node)  
+  - pubkey: "0xa94ea5403fc0fc31f6cd74f63691034a99c266cd3f956a3f8195de7cfb94bcb7994e3b415a1ef78409d7fb6a86cdbc9c"
+    labels:
+      protocol: "etherfi"
+      node: "orangepi5-plus"
+      client: "nimbus"
+
+  # NodeSet Hyperdrive validator (minipcamd3)
+  - pubkey: "0x932407aebb6f5fdf95e5d6d2486b2234eed6aab7ecb50d5a565d34289dc520d42572f15c5ceff3ae4165d6c533b48946"
+    labels:
+      protocol: "hyperdrive"
+      node: "minipcamd3"
+      client: "lodestar"
+
+  # Lido CSM validator 1 (minipcamd)
+  - pubkey: "0x96482f8422a906fc8480b58ea6f8c33116ea8c427770a47bffd046f7ef20d93b66df6efb4ba94885108a0194fe633639"
+    labels:
+      protocol: "lido102-csm"
+      node: "minipcamd"
+      client: "nimbus"
+
+  # Lido CSM validator 2 (minipcamd2)
+  - pubkey: "0x8f24d4f72fab7a2f7c0280653d20bd7232330d6aea656c5cb3cd9e43f3560f958486564fe61ee5e7eefaeed9ee565308"
+    labels:
+      protocol: "lido188-csm"
+      node: "minipcamd2"
+      client: "lighthouse"

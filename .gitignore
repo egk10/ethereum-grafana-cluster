@@ -1,0 +1,12 @@
+# Docker volumes
+validator_prometheus_data/
+validator_grafana_data/
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

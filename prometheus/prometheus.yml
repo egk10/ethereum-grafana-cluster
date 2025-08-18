@@ -1,0 +1,441 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'ethereum-validators'
+    monitor: 'validator-cluster'
+
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+scrape_configs:
+  # ===== LOCAL DASHBOARD METRICS =====
+  - job_name: 'orange-pi-dashboard'
+    static_configs:
+      - targets: ['validator-node-exporter:9100']
+    scrape_interval: 10s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'dashboard-opi5'
+      - target_label: node_type
+        replacement: 'dashboard'
+
+  - job_name: 'ethereum-validators'
+    static_configs:
+      - targets: ['ethereum-metrics:9090']
+    scrape_interval: 60s
+    relabel_configs:
+      - target_label: service_type
+        replacement: 'external-metrics'
+
+  # ===== HARDWARE MONITORING =====
+  - job_name: 'rocketpool-hardware'
+    static_configs:
+      - targets: ['minitx.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'rocketpool'
+      - target_label: protocol
+        replacement: 'rocketpool'
+      - target_label: client_el
+        replacement: 'besu'
+      - target_label: client_cl
+        replacement: 'teku'
+
+  - job_name: 'etherfi-hardware'
+    static_configs:
+      - targets: ['orangepi5-plus.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'etherfi'
+      - target_label: protocol
+        replacement: 'etherfi'
+      - target_label: client_el
+        replacement: 'geth'
+      - target_label: client_cl
+        replacement: 'nimbus'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'lido102-hardware'
+    static_configs:
+      - targets: ['minipcamd.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido102'
+      - target_label: protocol
+        replacement: 'lido-csm'
+      - target_label: client_el
+        replacement: 'nethermind'
+      - target_label: client_cl
+        replacement: 'nimbus'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'lido188-hardware'
+    static_configs:
+      - targets: ['minipcamd2.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido188'
+      - target_label: protocol
+        replacement: 'lido-csm'
+      - target_label: client_el
+        replacement: 'reth'
+      - target_label: client_cl
+        replacement: 'lighthouse'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'nodeset-hardware'
+    static_configs:
+      - targets: ['minipcamd3.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'nodeset'
+      - target_label: protocol
+        replacement: 'hyperdrive-stakewise'
+      - target_label: client_el
+        replacement: 'nethermind'
+      - target_label: client_cl
+        replacement: 'lodestar'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  # ===== PROTOCOL-SPECIFIC DIRECT METRICS =====
+  - job_name: 'lido-csm-vero'
+    static_configs:
+      - targets: 
+        - 'minipcamd.velociraptor-scylla.ts.net:8000'
+        - 'minipcamd2.velociraptor-scylla.ts.net:8000'
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: 'minipcamd\..*'
+        target_label: node_name
+        replacement: 'lido102'
+      - source_labels: [__address__]
+        regex: 'minipcamd2\..*'
+        target_label: node_name
+        replacement: 'lido188'
+      - target_label: protocol
+        replacement: 'lido-csm'
+      - target_label: service_type
+        replacement: 'validator-client'
+
+  - job_name: 'obol-charon-dvt'
+    static_configs:
+      - targets:
+        - 'orangepi5-plus.velociraptor-scylla.ts.net:3610'
+        - 'minipcamd.velociraptor-scylla.ts.net:3611'
+        - 'minipcamd2.velociraptor-scylla.ts.net:3612'
+        - 'minipcamd3.velociraptor-scylla.ts.net:3610'
+    scrape_interval: 15s
+    metrics_path: '/metrics'
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: 'orangepi5-plus.*:3610'
+        target_label: node_name
+        replacement: 'etherfi'
+      - source_labels: [__address__]
+        regex: 'minipcamd\..*:3611'
+        target_label: node_name
+        replacement: 'lido102'
+      - source_labels: [__address__]
+        regex: 'minipcamd2\..*:3612'
+        target_label: node_name
+        replacement: 'lido188'
+      - source_labels: [__address__]
+        regex: 'minipcamd3\..*:3610'
+        target_label: node_name
+        replacement: 'nodeset'
+      - target_label: dvt_type
+        replacement: 'charon'
+      - target_label: service_type
+        replacement: 'dvt-middleware'
+
+  - job_name: 'nodeset-stakewise-operator'
+    static_configs:
+      - targets: ['minipcamd3.velociraptor-scylla.ts.net:8180']
+    scrape_interval: 30s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'nodeset'
+      - target_label: protocol
+        replacement: 'stakewise'
+      - target_label: service_type
+        replacement: 'stakewise-operator'
+
+  - job_name: 'nodeset-hyperdrive'
+    static_configs:
+      - targets: ['minipcamd3.velociraptor-scylla.ts.net:8080']
+    scrape_interval: 30s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'nodeset'
+      - target_label: protocol
+        replacement: 'hyperdrive'
+      - target_label: service_type
+        replacement: 'hyperdrive-daemon'
+
+  # ===== FEDERATION CONFIGS (These are working great!) =====
+  - job_name: 'rocketpool-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"teku_.*"}'
+        - '{__name__=~"besu_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"rocketpool_.*"}'
+        - '{__name__=~"rp_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['minitx.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'rocketpool'
+      - target_label: protocol
+        replacement: 'rocketpool'
+      - target_label: client_el
+        replacement: 'besu'
+      - target_label: client_cl
+        replacement: 'teku'
+
+  - job_name: 'etherfi-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"nimbus_.*"}'
+        - '{__name__=~"geth_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"charon_.*"}'
+        - '{__name__=~"dvt_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['orangepi5-plus.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'etherfi'
+      - target_label: protocol
+        replacement: 'etherfi'
+      - target_label: client_el
+        replacement: 'geth'
+      - target_label: client_cl
+        replacement: 'nimbus'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'lido102-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"nimbus_.*"}'
+        - '{__name__=~"nethermind_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"charon_.*"}'
+        - '{__name__=~"dvt_.*"}'
+        - '{__name__=~"vero_.*"}'
+        - '{__name__=~"web3signer_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"lido_.*"}'
+        - '{__name__=~"csm_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['minipcamd.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido102'
+      - target_label: protocol
+        replacement: 'lido-csm'
+      - target_label: client_el
+        replacement: 'nethermind'
+      - target_label: client_cl
+        replacement: 'nimbus'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'lido188-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"lighthouse_.*"}'
+        - '{__name__=~"reth_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"charon_.*"}'
+        - '{__name__=~"dvt_.*"}'
+        - '{__name__=~"vero_.*"}'
+        - '{__name__=~"web3signer_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"lido_.*"}'
+        - '{__name__=~"csm_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['minipcamd2.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido188'
+      - target_label: protocol
+        replacement: 'lido-csm'
+      - target_label: client_el
+        replacement: 'reth'
+      - target_label: client_cl
+        replacement: 'lighthouse'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  - job_name: 'nodeset-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"lodestar_.*"}'
+        - '{__name__=~"nethermind_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"charon_.*"}'
+        - '{__name__=~"dvt_.*"}'
+        - '{__name__=~"hyperdrive_.*"}'
+        - '{__name__=~"nodeset_.*"}'
+        - '{__name__=~"stakewise_.*"}'
+        - '{__name__=~"sw_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['minipcamd3.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'nodeset'
+      - target_label: protocol
+        replacement: 'hyperdrive-stakewise'
+      - target_label: client_el
+        replacement: 'nethermind'
+      - target_label: client_cl
+        replacement: 'lodestar'
+      - target_label: dvt_enabled
+        replacement: 'true'
+
+  # ===== MEV-BOOST MONITORING =====
+  - job_name: 'mev-boost-relays'
+    static_configs:
+      - targets:
+        - 'minitx.velociraptor-scylla.ts.net:18550'
+        - 'orangepi5-plus.velociraptor-scylla.ts.net:18550'
+        - 'minipcamd.velociraptor-scylla.ts.net:18550'
+        - 'minipcamd2.velociraptor-scylla.ts.net:18550'
+        - 'minipcamd3.velociraptor-scylla.ts.net:18550'
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: 'minitx\..*'
+        target_label: node_name
+        replacement: 'rocketpool'
+      - source_labels: [__address__]
+        regex: 'orangepi5-plus\..*'
+        target_label: node_name
+        replacement: 'etherfi'
+      - source_labels: [__address__]
+        regex: 'minipcamd\..*'
+        target_label: node_name
+        replacement: 'lido102'
+      - source_labels: [__address__]
+        regex: 'minipcamd2\..*'
+        target_label: node_name
+        replacement: 'lido188'
+      - source_labels: [__address__]
+        regex: 'minipcamd3\..*'
+        target_label: node_name
+        replacement: 'nodeset'
+      - target_label: service_type
+        replacement: 'mev-boost'
+
+  - job_name: 'external-validator-monitoring'
+    static_configs:
+      - targets: ['ethereum-metrics:9090']
+    scrape_interval: 300s
+    relabel_configs:
+      - target_label: service_type
+        replacement: 'external-validator-api'
+      - target_label: data_source
+        replacement: 'beaconchain'

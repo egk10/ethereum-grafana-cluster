@@ -1,0 +1,267 @@
+# /etc/prometheus/rules/alerting_rules.yml
+groups:
+- name: validator.critical
+  rules:
+  - alert: ValidatorNodeOffline
+    expr: up{job=~".*-federation"} == 0
+    for: 2m
+    labels:
+      severity: critical
+      component: validator
+    annotations:
+      summary: "Validator node {{ $labels.node_name }} is offline"
+      description: "Node {{ $labels.node_name }} ({{ $labels.protocol }}) has been offline for more than 2 minutes. This will result in missed duties and penalties."
+      runbook_url: "https://your-docs.com/runbooks/validator-offline"
+
+  - alert: ValidatorEffectivenessLow
+    expr: validator:effectiveness_rate < 95
+    for: 10m
+    labels:
+      severity: critical
+      component: validator
+    annotations:
+      summary: "Low validator effectiveness on {{ $labels.node_name }}"
+      description: "Validator effectiveness on {{ $labels.node_name }} ({{ $labels.protocol }}) is {{ $value }}%, below 95% threshold."
+      runbook_url: "https://your-docs.com/runbooks/low-effectiveness"
+
+  - alert: ValidatorSlashing
+    expr: rate(validator_slashing_total[5m]) > 0
+    for: 0m
+    labels:
+      severity: critical
+      component: validator
+    annotations:
+      summary: "SLASHING DETECTED on {{ $labels.node_name }}"
+      description: "Validator slashing detected on {{ $labels.node_name }} ({{ $labels.protocol }}). Immediate investigation required!"
+      runbook_url: "https://your-docs.com/runbooks/slashing-incident"
+
+  - alert: ConsensusClientOutOfSync
+    expr: (beacon_head_slot - beacon_finalized_slot) > 100
+    for: 5m
+    labels:
+      severity: critical
+      component: consensus
+    annotations:
+      summary: "Consensus client out of sync on {{ $labels.node_name }}"
+      description: "Consensus client on {{ $labels.node_name }} is {{ $value }} slots behind finalization."
+      runbook_url: "https://your-docs.com/runbooks/sync-issues"
+
+- name: validator.warning
+  rules:
+  - alert: ValidatorMissedAttestations
+    expr: rate(validator_attestation_missed_total[1h]) > 0.02
+    for: 5m
+    labels:
+      severity: warning
+      component: validator
+    annotations:
+      summary: "Validator missing attestations on {{ $labels.node_name }}"
+      description: "Validator on {{ $labels.node_name }} ({{ $labels.protocol }}) has missed {{ $value }} attestations in the last hour."
+      runbook_url: "https://your-docs.com/runbooks/missed-attestations"
+
+  - alert: ValidatorHighInclusionDistance
+    expr: validator:avg_inclusion_distance > 3
+    for: 10m
+    labels:
+      severity: warning
+      component: validator
+    annotations:
+      summary: "High inclusion distance on {{ $labels.node_name }}"
+      description: "Average inclusion distance on {{ $labels.node_name }} is {{ $value }}, indicating potential performance issues."
+      runbook_url: "https://your-docs.com/runbooks/inclusion-distance"
+
+  - alert: ValidatorBalanceLow
+    expr: validator_balance_gwei < 31000000000
+    for: 10m
+    labels:
+      severity: warning
+      component: validator
+    annotations:
+      summary: "Validator balance low"
+      description: "Validator {{ $labels.validator_index }} on {{ $labels.node_name }} balance has dropped to {{ $value | humanize }} gwei (< 31 ETH)."
+      runbook_url: "https://your-docs.com/runbooks/low-balance"
+
+  - alert: PeerCountLow
+    expr: libp2p_peers < 30
+    for: 5m
+    labels:
+      severity: warning
+      component: network
+    annotations:
+      summary: "Low peer count on {{ $labels.node_name }}"
+      description: "Node {{ $labels.node_name }} has only {{ $value }} peers, below recommended minimum of 30."
+      runbook_url: "https://your-docs.com/runbooks/low-peers"
+
+  - alert: TimeNotSynchronized
+    expr: abs(node_timex_offset_seconds) > 0.5
+    for: 5m
+    labels:
+      severity: warning
+      component: system
+    annotations:
+      summary: "Time not synchronized on {{ $labels.node_name }}"
+      description: "System time on {{ $labels.node_name }} is {{ $value }}s off from NTP, which may cause validator issues."
+      runbook_url: "https://your-docs.com/runbooks/time-sync"
+
+- name: system.critical
+  rules:
+  - alert: SystemCriticalCPU
+    expr: node:cpu_utilization_percent > 90
+    for: 10m
+    labels:
+      severity: critical
+      component: system
+    annotations:
+      summary: "Critical CPU usage on {{ $labels.node_name }}"
+      description: "CPU usage on {{ $labels.node_name }} is {{ $value }}% for more than 10 minutes."
+      runbook_url: "https://your-docs.com/runbooks/high-cpu"
+
+  - alert: SystemCriticalMemory
+    expr: node:memory_utilization_percent > 95
+    for: 5m
+    labels:
+      severity: critical
+      component: system
+    annotations:
+      summary: "Critical memory usage on {{ $labels.node_name }}"
+      description: "Memory usage on {{ $labels.node_name }} is {{ $value }}%."
+      runbook_url: "https://your-docs.com/runbooks/high-memory"
+
+  - alert: SystemCriticalDisk
+    expr: node:disk_utilization_percent > 90
+    for: 5m
+    labels:
+      severity: critical
+      component: system
+    annotations:
+      summary: "Critical disk usage on {{ $labels.node_name }}"
+      description: "Disk usage on {{ $labels.node_name }} is {{ $value }}%."
+      runbook_url: "https://your-docs.com/runbooks/high-disk"
+
+- name: system.warning
+  rules:
+  - alert: SystemHighCPU
+    expr: node:cpu_utilization_percent > 80
+    for: 15m
+    labels:
+      severity: warning
+      component: system
+    annotations:
+      summary: "High CPU usage on {{ $labels.node_name }}"
+      description: "CPU usage on {{ $labels.node_name }} is {{ $value }}%."
+
+  - alert: SystemHighMemory
+    expr: node:memory_utilization_percent > 85
+    for: 10m
+    labels:
+      severity: warning
+      component: system
+    annotations:
+      summary: "High memory usage on {{ $labels.node_name }}"
+      description: "Memory usage on {{ $labels.node_name }} is {{ $value }}%."
+
+  - alert: SystemHighDisk
+    expr: node:disk_utilization_percent > 80
+    for: 10m
+    labels:
+      severity: warning
+      component: system
+    annotations:
+      summary: "High disk usage on {{ $labels.node_name }}"
+      description: "Disk usage on {{ $labels.node_name }} is {{ $value }}%."
+
+- name: dvt.alerts
+  rules:
+  - alert: CharonDVTOffline
+    expr: up{job="obol-charon-dvt"} == 0
+    for: 2m
+    labels:
+      severity: critical
+      component: dvt
+    annotations:
+      summary: "Charon DVT middleware offline on {{ $labels.node_name }}"
+      description: "Charon DVT service on {{ $labels.node_name }} is offline, affecting distributed validation."
+      runbook_url: "https://your-docs.com/runbooks/charon-offline"
+
+  - alert: DVTConsensusFailure
+    expr: rate(charon_consensus_failure_total[5m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+      component: dvt
+    annotations:
+      summary: "DVT consensus failures on {{ $labels.node_name }}"
+      description: "Charon DVT on {{ $labels.node_name }} is experiencing consensus failures."
+      runbook_url: "https://your-docs.com/runbooks/dvt-consensus"
+
+- name: mev.alerts
+  rules:
+  - alert: MEVBoostDown
+    expr: up{service_type="mev-boost"} == 0
+    for: 5m
+    labels:
+      severity: warning
+      component: mev
+    annotations:
+      summary: "MEV-Boost offline on {{ $labels.node_name }}"
+      description: "MEV-Boost service on {{ $labels.node_name }} is offline. Validator will fall back to local block building."
+      runbook_url: "https://your-docs.com/runbooks/mev-boost-down"
+
+  - alert: MEVRelayFailures
+    expr: rate(mevboost_relay_failures_total[10m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      component: mev
+    annotations:
+      summary: "High MEV relay failure rate on {{ $labels.node_name }}"
+      description: "MEV relay failure rate on {{ $labels.node_name }} is {{ $value }} failures/sec."
+
+- name: protocol.alerts
+  rules:
+  - alert: LidoCSMPerformanceDrop
+    expr: validator:effectiveness_rate{protocol="lido-csm"} < avg(validator:effectiveness_rate) - 2
+    for: 15m
+    labels:
+      severity: warning
+      component: protocol
+    annotations:
+      summary: "Lido CSM performance below average"
+      description: "Lido CSM validators on {{ $labels.node_name }} are performing {{ $value }}% below cluster average."
+
+  - alert: RocketPoolPerformanceDrop
+    expr: validator:effectiveness_rate{protocol="rocketpool"} < avg(validator:effectiveness_rate) - 2
+    for: 15m
+    labels:
+      severity: warning
+      component: protocol
+    annotations:
+      summary: "RocketPool performance below average"
+      description: "RocketPool validators on {{ $labels.node_name }} are performing {{ $value }}% below cluster average."
+
+  - alert: StakeWiseOperatorDown
+    expr: up{service_type="stakewise-operator"} == 0
+    for: 5m
+    labels:
+      severity: critical
+      component: protocol
+    annotations:
+      summary: "StakeWise operator offline"
+      description: "StakeWise operator service on {{ $labels.node_name }} is offline."
+      runbook_url: "https://your-docs.com/runbooks/stakewise-operator"
+
+- name: client.diversity
+  rules:
+  - alert: ClientDiversityRisk
+    expr: |
+      (
+        max(client:consensus_diversity) / sum(client:consensus_diversity)
+      ) > 0.66
+    for: 30m
+    labels:
+      severity: warning
+      component: diversity
+    annotations:
+      summary: "Client diversity risk detected"
+      description: "More than 66% of consensus clients are the same type, creating network risk."
+      runbook_url: "https://your-docs.com/runbooks/client-diversity"

@@ -1,0 +1,99 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Orange Pi 5 Dashboard system metrics (local)
+  - job_name: 'orange-pi-dashboard'
+    static_configs:
+      - targets: ['validator-node-exporter:9100']
+    scrape_interval: 10s
+
+  # Ethereum validator metrics from beaconcha.in (local)
+  - job_name: 'ethereum-validators'
+    static_configs:
+      - targets: ['ethereum-metrics:9090']
+    scrape_interval: 60s
+
+  # ===== HARDWARE MONITORING (All 5 Validator Nodes) =====
+  - job_name: 'rocketpool-hardware'
+    static_configs:
+      - targets: ['minitx.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'rocketpool'
+      - target_label: protocol
+        replacement: 'rocketpool'
+
+  - job_name: 'etherfi-hardware'
+    static_configs:
+      - targets: ['orangepi5-plus.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'etherfi'
+      - target_label: protocol
+        replacement: 'etherfi'
+
+  - job_name: 'lido102-hardware'
+    static_configs:
+      - targets: ['minipcamd.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido102'
+      - target_label: protocol
+        replacement: 'lido-csm'
+
+  - job_name: 'lido188-hardware'
+    static_configs:
+      - targets: ['minipcamd2.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'lido188'
+      - target_label: protocol
+        replacement: 'lido-csm'
+
+  - job_name: 'nodeset-hardware'
+    static_configs:
+      - targets: ['minipcamd3.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'nodeset'
+      - target_label: protocol
+        replacement: 'hyperdrive-stakewise'
+
+  # ===== CONSENSUS CLIENT METRICS =====
+  # ===== FEDERATION - Pull metrics from each node's local Prometheus =====
+  - job_name: 'rocketpool-federation'
+    scrape_interval: 30s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+    static_configs:
+      - targets: ['minitx.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'rocketpool'
+
+  - job_name: 'etherfi-federation'
+    scrape_interval: 30s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+    static_configs:
+      - targets: ['orangepi5-plus.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'etherfi'
