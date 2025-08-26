@@ -496,7 +496,85 @@
           "refId": "A"
         }
       ],
-      "title": "🔗 NODESET",
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "aev1a8fxhewaoc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "DOWN"
+                },
+                "1": {
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0-16979757807",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "aev1a8fxhewaoc"
+          },
+          "expr": "up{node_name=\"ryzen7\", job=~\".*-hardware\"}",
+          "interval": "",
+          "legendFormat": "Status",
+          "refId": "A"
+        }
+      ],
+      "title": "🏆 RYZEN7",
       "type": "stat"
     },
     {
@@ -572,11 +650,6 @@
       "title": "🔗 ACTIVE VALIDATORS",
       "type": "gauge"
     },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -664,6 +737,18 @@
                 "value": "🔗 NodeSet"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ryzen7"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "🏆 Ryzen7"
+              }
+            ]
           }
         ]
       },
@@ -697,7 +782,7 @@
             "type": "prometheus",
             "uid": "aev1a8fxhewaoc"
           },
-          "expr": "100 - (avg by (node_name) (irate(node_cpu_seconds_total{mode=\"idle\", node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset\"}[5m])) * 100)",
+          "expr": "100 - (avg by (node_name) (irate(node_cpu_seconds_total{mode=\"idle\", node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset|ryzen7\"}[5m])) * 100)",
           "interval": "",
           "legendFormat": "{{node_name}}",
           "refId": "A"
@@ -798,6 +883,18 @@
                 "value": "🔗 NodeSet"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "ryzen7.*"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "🏆 Ryzen7"
+              }
+            ]
           }
         ]
       },
@@ -831,7 +928,7 @@
             "type": "prometheus",
             "uid": "aev1a8fxhewaoc"
           },
-          "expr": "max by (node_name) (node_hwmon_temp_celsius{node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset\"})",
+          "expr": "max by (node_name) (node_hwmon_temp_celsius{node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset|ryzen7\"})",
           "interval": "",
           "legendFormat": "{{node_name}}",
           "refId": "A"
