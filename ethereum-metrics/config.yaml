@@ -49,3 +49,17 @@ validators:
       protocol: "lido188-csm"
       node: "minipcamd2"
       client: "lighthouse"
+
+  # Stakewise Solo validator 1 (ryzen7)
+  - pubkey: "0xb2790d140d91d55f301d220dd16fe2f69dfeaf16b1a7d50326c9d307c9bc39751d4049a7df2980922f3e58ba84dd9f4c"
+    labels:
+      protocol: "stakewise-solo"
+      node: "minipcamd4"
+      client: "grandine"
+
+  # Stakewise Solo validator 2 (ryzen7)
+  - pubkey: "0xb5f194f913d812ad316da491af6ad6f9b74dc1b4844537cd270a7fed951570d97455562102a5096975ad572c7ef86f5f"
+    labels:
+      protocol: "stakewise-solo"
+      node: "minipcamd4"
+      client: "grandine"

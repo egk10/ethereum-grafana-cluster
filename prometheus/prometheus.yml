@@ -107,7 +107,21 @@ scrape_configs:
       - target_label: dvt_enabled
         replacement: 'true'
 
-  # ===== PROTOCOL-SPECIFIC DIRECT METRICS =====
+  - job_name: 'ryzen7-hardware'
+    static_configs:
+      - targets: ['minipcamd4.velociraptor-scylla.ts.net:9100']
+    scrape_interval: 15s
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'ryzen7'
+      - target_label: protocol
+        replacement: 'stakewise-solo'
+      - target_label: client_el
+        replacement: 'erigon'
+      - target_label: client_cl
+        replacement: 'grandine'
+      - target_label: dvt_enabled
+        replacement: 'false'
   - job_name: 'lido-csm-vero'
     static_configs:
       - targets: 
@@ -386,7 +400,45 @@ scrape_configs:
       - target_label: dvt_enabled
         replacement: 'true'
 
-  # ===== MEV-BOOST MONITORING =====
+  - job_name: 'ryzen7-federation'
+    scrape_interval: 30s
+    scrape_timeout: 25s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{__name__=~"beacon_.*"}'
+        - '{__name__=~"validator_.*"}'
+        - '{__name__=~"libp2p_.*"}'
+        - '{__name__=~"grandine_.*"}'
+        - '{__name__=~"erigon_.*"}'
+        - '{__name__=~"ethereum_.*"}'
+        - '{__name__=~"mevboost_.*"}'
+        - '{__name__=~"mev_boost_.*"}'
+        - '{__name__=~"stakewise_.*"}'
+        - '{__name__=~"sw_.*"}'
+        - '{__name__=~"sync_.*"}'
+        - '{__name__=~"peers_.*"}'
+        - '{__name__=~"p2p_.*"}'
+        - '{__name__=~"network_.*"}'
+        - '{__name__=~"slot_.*"}'
+        - '{__name__=~"epoch_.*"}'
+        - '{__name__=~"inclusion_.*"}'
+        - '{__name__=~"missed_.*"}'
+        - '{__name__=~"rewards_.*"}'
+    static_configs:
+      - targets: ['minipcamd4.velociraptor-scylla.ts.net:9090']
+    relabel_configs:
+      - target_label: node_name
+        replacement: 'ryzen7'
+      - target_label: protocol
+        replacement: 'stakewise-solo'
+      - target_label: client_el
+        replacement: 'erigon'
+      - target_label: client_cl
+        replacement: 'grandine'
+      - target_label: dvt_enabled
+        replacement: 'false'
   - job_name: 'mev-boost-relays'
     static_configs:
       - targets:
@@ -395,6 +447,7 @@ scrape_configs:
         - 'minipcamd.velociraptor-scylla.ts.net:18550'
         - 'minipcamd2.velociraptor-scylla.ts.net:18550'
         - 'minipcamd3.velociraptor-scylla.ts.net:18550'
+        - 'minipcamd4.velociraptor-scylla.ts.net:18550'
     scrape_interval: 30s
     metrics_path: '/metrics'
     relabel_configs:
@@ -418,6 +471,10 @@ scrape_configs:
         regex: 'minipcamd3\..*'
         target_label: node_name
         replacement: 'nodeset'
+      - source_labels: [__address__]
+        regex: 'minipcamd4\..*'
+        target_label: node_name
+        replacement: 'ryzen7'
       - target_label: service_type
         replacement: 'mev-boost'
 
