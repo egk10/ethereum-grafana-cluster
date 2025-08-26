@@ -1,0 +1,13 @@
+# custom.yml - Safe from eth-docker updates
+# This file is in .gitignore and won't be overwritten by ethd update
+
+services:
+  # Override node-exporter to expose port for central monitoring
+  node-exporter:
+    ports:
+      - "9100:9100/tcp"
+
+  # Override ethereum-metrics-exporter if it exists  
+  ethereum-metrics-exporter:
+    ports:
+      - "9093:9090/tcp"
