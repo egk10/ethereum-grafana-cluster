@@ -496,6 +496,9 @@
           "refId": "A"
         }
       ],
+      "title": "🔗 NODESET",
+      "type": "stat"
+    },
     {
       "datasource": {
         "type": "prometheus",
@@ -650,6 +653,11 @@
       "title": "🔗 ACTIVE VALIDATORS",
       "type": "gauge"
     },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "aev1a8fxhewaoc"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
