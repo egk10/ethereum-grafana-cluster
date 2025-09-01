@@ -23,8 +23,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -82,22 +82,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "sum(validator_monitor_validators_total)",
           "interval": "",
           "legendFormat": "Total Keys Loaded",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🔗 VALIDATOR KEYS LOADED",
+      "title": "\ud83d\udd17 VALIDATOR KEYS LOADED",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -155,22 +156,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "count(up{job=~\".*-hardware\"} == 1)",
           "interval": "",
           "legendFormat": "Online Nodes",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🏠 NODES ONLINE",
+      "title": "\ud83c\udfe0 NODES ONLINE",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -228,22 +230,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "count(up{job=~\".*-federation\"} == 1)",
           "interval": "",
           "legendFormat": "Consensus Clients",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "⛓️ CONSENSUS ONLINE",
+      "title": "\u26d3\ufe0f CONSENSUS ONLINE",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -311,7 +314,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🚀 Rocketpool"
+                "value": "\ud83d\ude80 Rocketpool"
               }
             ]
           },
@@ -323,7 +326,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🌊 EtherFi"
+                "value": "\ud83c\udf0a EtherFi"
               }
             ]
           },
@@ -335,7 +338,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido102"
+                "value": "\ud83c\udfdb\ufe0f Lido102"
               }
             ]
           },
@@ -347,7 +350,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido188"
+                "value": "\ud83c\udfdb\ufe0f Lido188"
               }
             ]
           },
@@ -359,7 +362,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🔗 NodeSet"
+                "value": "\ud83d\udd17 NodeSet"
               }
             ]
           }
@@ -389,22 +392,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "100 - (avg by (node_name) (irate(node_cpu_seconds_total{mode=\"idle\", node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset\"}[5m])) * 100)",
           "interval": "",
           "legendFormat": "{{node_name}}",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "💾 CPU USAGE ACROSS ALL NODES",
+      "title": "\ud83d\udcbe CPU USAGE ACROSS ALL NODES",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -462,22 +466,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "avg(eth_validator_performance_attestation_hit_rate) * 100",
           "interval": "",
           "legendFormat": "Attestation Success",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "✅ ATTESTATION SUCCESS RATE",
+      "title": "\u2705 ATTESTATION SUCCESS RATE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -535,22 +540,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "avg(eth_validator_performance_proposal_hit_rate) * 100",
           "interval": "",
           "legendFormat": "Proposal Success",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🏆 PROPOSAL SUCCESS RATE",
+      "title": "\ud83c\udfc6 PROPOSAL SUCCESS RATE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -633,21 +639,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "avg(eth_validator_performance_attestation_inclusion_delay_average_seconds)",
           "interval": "",
           "legendFormat": "Inclusion Delay",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "⏱️ INCLUSION DISTANCE",
+      "title": "\u23f1\ufe0f INCLUSION DISTANCE",
       "type": "timeseries"
     }
   ],
-  "preload": false,
+  "preload": true,
   "refresh": "15s",
+  "liveNow": true,
   "schemaVersion": 41,
   "tags": [
     "ethereum",
@@ -659,12 +667,12 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "📊 Validator Cluster Performance",
+  "title": "\ud83d\udcca Validator Cluster Performance",
   "uid": "performance-summary",
   "version": 1
 }

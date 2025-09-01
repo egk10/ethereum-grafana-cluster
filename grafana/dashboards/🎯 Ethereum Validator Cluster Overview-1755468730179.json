@@ -23,8 +23,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -82,22 +82,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "count(up{job=~\".*-hardware\"} == 1)",
+          "instant": true,
           "interval": "",
           "legendFormat": "Online Nodes",
           "refId": "A"
         }
       ],
-      "title": "🏠 CLUSTER STATUS",
+      "title": "\ud83c\udfe0 CLUSTER STATUS",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -163,22 +164,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"rocketpool\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🚀 ROCKETPOOL",
+      "title": "\ud83d\ude80 ROCKETPOOL",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -244,22 +246,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"etherfi\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🌊 ETHERFI",
+      "title": "\ud83c\udf0a ETHERFI",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -325,22 +328,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"lido102\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🏛️ LIDO102",
+      "title": "\ud83c\udfdb\ufe0f LIDO102",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -406,22 +410,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"lido188\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🏛️ LIDO188",
+      "title": "\ud83c\udfdb\ufe0f LIDO188",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -487,22 +492,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"nodeset\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🔗 NODESET",
+      "title": "\ud83d\udd17 NODESET",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -568,22 +574,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"ryzen7\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🏆 RYZEN7",
+      "title": "\ud83c\udfc6 RYZEN7",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -641,22 +648,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "count(validator_monitor_active == 1) + count(validator_status == 12)",
+          "instant": true,
           "interval": "",
           "legendFormat": "Active Validators",
           "refId": "A"
         }
       ],
-      "title": "🔗 ACTIVE VALIDATORS",
+      "title": "\ud83d\udd17 ACTIVE VALIDATORS",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -694,7 +702,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🚀 Rocketpool"
+                "value": "\ud83d\ude80 Rocketpool"
               }
             ]
           },
@@ -706,7 +714,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🌊 EtherFi"
+                "value": "\ud83c\udf0a EtherFi"
               }
             ]
           },
@@ -718,7 +726,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido102"
+                "value": "\ud83c\udfdb\ufe0f Lido102"
               }
             ]
           },
@@ -730,7 +738,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido188"
+                "value": "\ud83c\udfdb\ufe0f Lido188"
               }
             ]
           },
@@ -742,7 +750,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🔗 NodeSet"
+                "value": "\ud83d\udd17 NodeSet"
               }
             ]
           },
@@ -754,7 +762,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏆 Ryzen7"
+                "value": "\ud83c\udfc6 Ryzen7"
               }
             ]
           }
@@ -787,22 +795,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "100 - (avg by (node_name) (irate(node_cpu_seconds_total{mode=\"idle\", node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset|ryzen7\"}[5m])) * 100)",
           "interval": "",
           "legendFormat": "{{node_name}}",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "💾 CPU USAGE",
+      "title": "\ud83d\udcbe CPU USAGE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -840,7 +849,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🚀 Rocketpool"
+                "value": "\ud83d\ude80 Rocketpool"
               }
             ]
           },
@@ -852,7 +861,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🌊 EtherFi"
+                "value": "\ud83c\udf0a EtherFi"
               }
             ]
           },
@@ -864,7 +873,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido102"
+                "value": "\ud83c\udfdb\ufe0f Lido102"
               }
             ]
           },
@@ -876,7 +885,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏛️ Lido188"
+                "value": "\ud83c\udfdb\ufe0f Lido188"
               }
             ]
           },
@@ -888,7 +897,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🔗 NodeSet"
+                "value": "\ud83d\udd17 NodeSet"
               }
             ]
           },
@@ -900,7 +909,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "🏆 Ryzen7"
+                "value": "\ud83c\udfc6 Ryzen7"
               }
             ]
           }
@@ -933,21 +942,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "max by (node_name) (node_hwmon_temp_celsius{node_name=~\"rocketpool|etherfi|lido102|lido188|nodeset|ryzen7\"})",
+          "instant": true,
           "interval": "",
           "legendFormat": "{{node_name}}",
           "refId": "A"
         }
       ],
-      "title": "🌡️ TEMPERATURES",
+      "title": "\ud83c\udf21\ufe0f TEMPERATURES",
       "type": "gauge"
     }
   ],
-  "preload": false,
+  "preload": true,
   "refresh": "15s",
+  "liveNow": true,
   "schemaVersion": 41,
   "tags": [
     "ethereum",
@@ -964,7 +975,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "🎯 Ethereum Validator Cluster Overview",
+  "title": "\ud83c\udfaf Ethereum Validator Cluster Overview",
   "uid": "cluster-overview",
   "version": 8
 }

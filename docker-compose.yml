@@ -32,7 +32,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=validator123
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_SERVE_FROM_SUB_PATH=false
-      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=
+      - GF_INSTALL_PLUGINS=
     restart: unless-stopped
     networks:
       - validator-net

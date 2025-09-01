@@ -23,8 +23,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -90,22 +90,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "up{node_name=\"rocketpool\", job=~\".*-hardware\"}",
           "interval": "",
           "legendFormat": "Hardware Status",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🚀 ROCKETPOOL STATUS",
+      "title": "\ud83d\ude80 ROCKETPOOL STATUS",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -163,22 +164,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "100 - (avg(irate(node_cpu_seconds_total{mode=\"idle\", node_name=\"rocketpool\"}[5m])) * 100)",
           "interval": "",
           "legendFormat": "CPU Usage",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "💾 CPU USAGE",
+      "title": "\ud83d\udcbe CPU USAGE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -236,22 +238,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "max(node_hwmon_temp_celsius{node_name=\"rocketpool\"})",
           "interval": "",
           "legendFormat": "Temperature",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🌡️ TEMPERATURE",
+      "title": "\ud83c\udf21\ufe0f TEMPERATURE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -309,22 +312,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "100 - (node_filesystem_avail_bytes{node_name=\"rocketpool\", fstype!=\"tmpfs\"} / node_filesystem_size_bytes{node_name=\"rocketpool\", fstype!=\"tmpfs\"} * 100)",
           "interval": "",
           "legendFormat": "Disk Usage",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "💽 DISK USAGE",
+      "title": "\ud83d\udcbd DISK USAGE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -382,22 +386,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "100 - (node_memory_MemAvailable_bytes{node_name=\"rocketpool\"} / node_memory_MemTotal_bytes{node_name=\"rocketpool\"} * 100)",
           "interval": "",
           "legendFormat": "Memory Usage",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "🧠 MEMORY USAGE",
+      "title": "\ud83e\udde0 MEMORY USAGE",
       "type": "gauge"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "aev1a8fxhewaoc"
+        "type": "prometheus"
+        
       },
       "fieldConfig": {
         "defaults": {
@@ -455,21 +460,23 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "aev1a8fxhewaoc"
+            "type": "prometheus"
+            
           },
           "expr": "node_load15{node_name=\"rocketpool\"}",
           "interval": "",
           "legendFormat": "Load Average",
-          "refId": "A"
+          "refId": "A",
+          "instant": true
         }
       ],
-      "title": "⚡ SYSTEM LOAD",
+      "title": "\u26a1 SYSTEM LOAD",
       "type": "stat"
     }
   ],
-  "preload": false,
+  "preload": true,
   "refresh": "15s",
+  "liveNow": true,
   "schemaVersion": 41,
   "tags": [
     "ethereum",
@@ -486,7 +493,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "🚀 Rocketpool Validator Node",
+  "title": "\ud83d\ude80 Rocketpool Validator Node",
   "uid": "rocketpool-focus",
   "version": 1
 }
