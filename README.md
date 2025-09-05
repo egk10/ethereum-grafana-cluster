@@ -51,6 +51,12 @@ The system is configured to automatically start on reboot:
    - Opens Nethermind UI in a new Firefox window
    - Starts automatic switching every 5 minutes
 
+### Current Status ✅
+- **Grafana**: Working perfectly at `http://localhost:3000/dashboards`
+- **Nethermind/Prometheus**: ✅ **WORKING** - Falls back to local Prometheus if remote Nethermind unavailable
+- **Auto-Switching**: ✅ **WORKING** - Switches every 5 minutes between Grafana and Prometheus
+- **Auto-Start**: ✅ Configured with cron job for system boot
+
 ### Manual Control
 ```bash
 # Start only the switcher
