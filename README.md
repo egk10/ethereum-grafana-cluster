@@ -37,7 +37,53 @@ A comprehensive monitoring solution for Ethereum validator clusters with automat
 
 For automated display switching between Grafana and Nethermind:
 
-### Manual Start
+### Background Mode Instructions
+
+**Method 1 - Simple Background (Recommended):**
+```bash
+cd /home/egk/ethereum-grafana-cluster
+./start-living-room.sh &
+```
+
+**Method 2 - Detached with Logging:**
+```bash
+cd /home/egk/ethereum-grafana-cluster
+nohup ./start-living-room.sh > living-room.log 2>&1 &
+```
+
+**Method 3 - Screen Session:**
+```bash
+cd /home/egk/ethereum-grafana-cluster
+screen -S living-room ./start-living-room.sh
+# Detach: Ctrl+A, D
+# Reattach: screen -r living-room
+```
+
+### Background Process Management
+
+**Check if running:**
+```bash
+ps aux | grep start-living-room
+ps aux | grep firefox
+ps aux | grep super-simple-switcher
+```
+
+**View current windows:**
+```bash
+DISPLAY=:0 wmctrl -l
+```
+
+**Stop background process:**
+```bash
+kill <PID>  # Replace <PID> with process ID from ps command
+```
+
+**Stop all Firefox windows:**
+```bash
+pkill firefox
+```
+
+### Manual Start (Foreground)
 ```bash
 ./start-living-room.sh
 ```
@@ -53,28 +99,9 @@ The system is configured to automatically start on reboot:
 
 ### Current Status ✅
 - **Grafana**: Working perfectly at `http://localhost:3000/dashboards`
-- **Nethermind/Prometheus**: ✅ **WORKING** - Falls back to local Prometheus if remote Nethermind unavailable
-- **Auto-Switching**: ✅ **WORKING** - Switches every 5 minutes between Grafana and Prometheus
-- **Auto-Start**: ✅ Configured with cron job for system boot
-
-### Manual Control
-```bash
-# Start only the switcher
-./super-simple-switcher.sh &
-
-# Stop switching
-pkill -f super-simple-switcher
-
-# Stop all Firefox windows
-pkill firefox
-```
-
-The system will automatically:
-- ✅ Start Firefox in full-screen kiosk mode
-- ✅ Load Grafana playlist/dashboard
-- ✅ Load Nethermind UI
-- ✅ Switch between them every 5 minutes
-- ✅ Restart automatically on system reboot
+- **Nethermind**: ✅ **WORKING** - Connected to `http://100.67.5.3:8545`
+- **Auto-Switching**: ✅ **WORKING** - Switches every 5 minutes between Grafana and Nethermind
+- **Background Mode**: ✅ **WORKING** - All methods tested and functional
 
 ## Configuration
 
@@ -134,59 +161,4 @@ To add your Ethereum nodes to the monitoring:
 
 ## License
 
-MIT License - see LICENSE file for details Monitoring with Grafana and Prometheus
-
-This repository contains the configuration for a comprehensive monitoring solution for an Ethereum validator cluster. It uses Prometheus for metrics collection and Grafana for visualization, providing detailed dashboards to track validator performance, hardware status, and protocol-specific metrics.
-
-## Features
-
-- **Multi-Node Monitoring:** Track the health and performance of multiple validator nodes from a single dashboard.
-- **Templated Dashboards:** Easily switch between different nodes and validator types using templated dashboards.
-- **Performance Insights:** Monitor key performance indicators such as attestation success rate, proposal success rate, and inclusion distance.
-- **Hardware Monitoring:** Keep an eye on CPU usage, memory, disk space, and temperature for each node.
-- **Protocol-Specific Dashboards:** Dedicated dashboards for various staking protocols like Rocketpool, Lido, EtherFi, and NodeSet.
-- **Dockerized Setup:** The entire monitoring stack is containerized using Docker Compose for easy deployment and management.
-
-## Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose installed on your monitoring machine.
-- Access to the metrics endpoints of your validator nodes.
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/egk10/ethereum-grafana-cluster.git
-    cd ethereum-grafana-cluster
-    ```
-
-2.  **Configure Prometheus:**
-    -   Edit `prometheus/prometheus.yml` to match the IP addresses and ports of your validator nodes.
-    -   The `relabel_configs` are used to add identifying labels to your nodes, so be sure to update those as well.
-
-3.  **Configure Validator Metrics:**
-    -   Edit `ethereum-metrics/config.yaml` to include the public keys of your validators. This is necessary for the `ethereum-metrics-exporter` to pull performance data from the beacon chain.
-
-4.  **Start the monitoring stack:**
-    ```bash
-    docker-compose up -d
-    ```
-
-5.  **Access Grafana:**
-    -   Open your web browser and navigate to `http://<your-monitoring-machine-ip>:3000`.
-    -   Log in with the default credentials (admin/validator123). You should change the password after your first login.
-
-## Dashboards
-
-This project includes the following dashboards:
-
--   **Ethereum Validator Cluster Overview:** A high-level overview of your entire validator cluster.
--   **Validator Cluster Performance:** Detailed performance metrics for your validators.
--   **Lido CSM Node (templated):** A templated dashboard for your Lido CSM nodes.
--   **EtherFi DVT Cluster:** A dashboard for your EtherFi DVT cluster.
--   **NodeSet Hyperdrive + StakeWise:** A dashboard for your NodeSet Hyperdrive and StakeWise validators.
--   **Rocketpool Validator Node:** A dashboard for your Rocketpool validator node.
-
-These dashboards are automatically provisioned when you start the Grafana container.
+MIT License - see LICENSE file for details

@@ -22,8 +22,8 @@ sleep 5
 # Start Nethermind in new window
 echo "🔥 Starting Nethermind UI..."
 # Try the remote URL first, fallback to local Prometheus if not available
-if curl -s --max-time 5 http://minipcamd4.velociraptor-scylla.ts.net:26060/ > /dev/null; then
-    DISPLAY=:0 firefox --new-window --kiosk http://minipcamd4.velociraptor-scylla.ts.net:26060/ &
+if curl -s --max-time 5 http://100.67.5.3:8545 > /dev/null; then
+    DISPLAY=:0 firefox --new-window --kiosk http://100.67.5.3:8545 &
 else
     echo "⚠️  Nethermind URL not accessible, using local Prometheus instead"
     DISPLAY=:0 firefox --new-window --kiosk http://localhost:9091/ &
