@@ -37,15 +37,38 @@ A comprehensive monitoring solution for Ethereum validator clusters with automat
 
 For automated display switching between Grafana and Nethermind:
 
-1. **Start the display:**
-   ```bash
-   ./start-living-room.sh
-   ```
+### Manual Start
+```bash
+./start-living-room.sh
+```
 
-2. **The system will:**
-   - Open Grafana in Firefox kiosk mode
-   - Open Nethermind UI in a new Firefox window
-   - Automatically switch between them every 5 minutes
+### Auto-Start on Boot
+The system is configured to automatically start on reboot:
+
+1. **Cron Job**: Runs 30 seconds after system boot
+2. **What it does**:
+   - Opens Grafana in Firefox kiosk mode
+   - Opens Nethermind UI in a new Firefox window
+   - Starts automatic switching every 5 minutes
+
+### Manual Control
+```bash
+# Start only the switcher
+./super-simple-switcher.sh &
+
+# Stop switching
+pkill -f super-simple-switcher
+
+# Stop all Firefox windows
+pkill firefox
+```
+
+The system will automatically:
+- ✅ Start Firefox in full-screen kiosk mode
+- ✅ Load Grafana playlist/dashboard
+- ✅ Load Nethermind UI
+- ✅ Switch between them every 5 minutes
+- ✅ Restart automatically on system reboot
 
 ## Configuration
 

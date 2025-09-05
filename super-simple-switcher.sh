@@ -6,20 +6,16 @@
 echo "🔄 Starting super simple window switcher..."
 echo "📋 Schedule: 5min Grafana → 5min Nethermind → repeat"
 
-# Window IDs from wmctrl -l
-GRAFANA_ID="0x0260006c"
-NETHERMIND_ID="0x02600015"
-
 # Function to switch to Grafana
 switch_to_grafana() {
     echo "$(date): 📊 Switching to Grafana..."
-    DISPLAY=:0 wmctrl -i -a $GRAFANA_ID
+    DISPLAY=:0 wmctrl -a "Grafana"
 }
 
 # Function to switch to Nethermind
 switch_to_nethermind() {
     echo "$(date): 🔥 Switching to Nethermind..."
-    DISPLAY=:0 wmctrl -i -a $NETHERMIND_ID
+    DISPLAY=:0 wmctrl -a "Nethermind"
 }
 
 # Start with Grafana

@@ -7,7 +7,7 @@ echo "🚀 Starting Living Room Display..."
 
 # Kill any existing processes
 pkill firefox
-pkill -f ultra-simple-switcher
+pkill -f super-simple-switcher
 
 # Wait a moment
 sleep 2
@@ -28,7 +28,7 @@ sleep 5
 
 # Start auto-switching
 echo "🔄 Starting auto-switcher..."
-./super-simple-switcher.sh &
+./super-simple-switcher.sh
 
 echo "✅ Living room display started!"
 echo "📋 Switching every 5 minutes between Grafana and Nethermind"
