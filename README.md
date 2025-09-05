@@ -1,4 +1,111 @@
-# Ethereum Validator Cluster Monitoring with Grafana and Prometheus
+# Ethereum Grafana Cluster Monitor
+
+A comprehensive monitoring solution for Ethereum validator clusters with automated living room display switching.
+
+## Features
+
+- **Multi-Node Monitoring**: Monitor multiple Ethereum nodes via Prometheus federation
+- **Grafana Dashboards**: Pre-configured dashboards for various Ethereum clients (Nethermind, Lighthouse, etc.)
+- **Living Room Display**: Automated switching between Grafana dashboards and Nethermind UI
+- **Docker Compose**: Easy deployment with Docker Compose
+- **Tailscale Integration**: Secure remote access via Tailscale VPN
+
+## Quick Start
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/egk10/ethereum-grafana-cluster.git
+   cd ethereum-grafana-cluster
+   ```
+
+2. **Set environment variables:**
+   ```bash
+   export GRAFANA_ADMIN_PASSWORD=your_secure_password
+   ```
+
+3. **Start the monitoring stack:**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Access Grafana:**
+   - URL: http://localhost:3000
+   - Username: admin
+   - Password: your_secure_password
+
+## Living Room Display Setup
+
+For automated display switching between Grafana and Nethermind:
+
+1. **Start the display:**
+   ```bash
+   ./start-living-room.sh
+   ```
+
+2. **The system will:**
+   - Open Grafana in Firefox kiosk mode
+   - Open Nethermind UI in a new Firefox window
+   - Automatically switch between them every 5 minutes
+
+## Configuration
+
+### Environment Variables
+
+- `GRAFANA_ADMIN_PASSWORD`: Admin password for Grafana (default: changeme123)
+
+### Node Integration
+
+To add your Ethereum nodes to the monitoring:
+
+1. Copy `eth-docker-configs/` to your node
+2. Update Prometheus federation targets in `prometheus/prometheus.yml`
+3. Update datasource URLs in `grafana/datasources/prometheus.yml`
+
+## Project Structure
+
+```
+├── docker-compose.yml          # Main Docker Compose configuration
+├── grafana/                    # Grafana configuration and dashboards
+├── prometheus/                 # Prometheus configuration and rules
+├── eth-docker-configs/         # Configuration for eth-docker integration
+├── ethereum-metrics/           # Ethereum metrics exporter config
+├── start-living-room.sh        # Living room display starter script
+├── super-simple-switcher.sh    # Auto-switching script
+└── validator-dashboard/        # Additional dashboard files
+```
+
+## Supported Ethereum Clients
+
+- Nethermind
+- Lighthouse
+- Prysm
+- Teku
+- And more via Prometheus metrics
+
+## Requirements
+
+- Docker and Docker Compose
+- Firefox (for living room display)
+- wmctrl (for window switching)
+- Tailscale (for remote access)
+
+## Security
+
+- Change default Grafana password
+- Use Tailscale for secure remote access
+- Review firewall settings for Prometheus ports
+- Consider using environment files for sensitive data
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details Monitoring with Grafana and Prometheus
 
 This repository contains the configuration for a comprehensive monitoring solution for an Ethereum validator cluster. It uses Prometheus for metrics collection and Grafana for visualization, providing detailed dashboards to track validator performance, hardware status, and protocol-specific metrics.
 

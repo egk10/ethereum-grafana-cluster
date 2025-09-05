@@ -28,8 +28,9 @@ services:
       - validator_grafana_data:/var/lib/grafana
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/playlists:/etc/grafana/provisioning/playlists
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=validator123
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme123}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_SERVE_FROM_SUB_PATH=false
       - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=

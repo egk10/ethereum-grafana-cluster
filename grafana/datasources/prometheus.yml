@@ -8,3 +8,27 @@ datasources:
     uid: prometheus
     isDefault: true
     editable: false
+
+  - name: Charon Prometheus
+    type: prometheus
+    access: proxy
+    url: http://100.72.3.103:9092
+    uid: charon-prometheus
+    isDefault: false
+    editable: false
+
+  - name: Charon Grafana
+    type: grafana
+    access: proxy
+    url: http://100.72.3.103:3001
+    uid: charon-grafana
+    isDefault: false
+    editable: false
+
+  - name: Nethermind Prometheus
+    type: prometheus
+    access: proxy
+    url: http://100.67.5.3:9090
+    uid: nethermind-prometheus
+    isDefault: false
+    editable: false

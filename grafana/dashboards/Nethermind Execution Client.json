@@ -1,0 +1,131 @@
+{
+  "title": "Nethermind Execution Client",
+  "tags": [
+    "nethermind",
+    "ethereum",
+    "execution",
+    "client"
+  ],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Node Status",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job=\"execution\"}",
+          "legendFormat": "Node Status"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "DOWN",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "UP",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 2,
+      "title": "Current Block",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "nethermind_blocks",
+          "legendFormat": "Block Height"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      }
+    },
+    {
+      "id": 3,
+      "title": "Network Peers",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "ethereum_peer_count",
+          "legendFormat": "Active Peers"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      }
+    },
+    {
+      "id": 4,
+      "title": "Block Processing",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(nethermind_blocks[5m])",
+          "legendFormat": "Blocks/sec"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      }
+    },
+    {
+      "id": 5,
+      "title": "Transaction Pool",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "nethermind_txpool_pending_count",
+          "legendFormat": "Pending Transactions"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      }
+    }
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "refresh": "30s",
+  "schemaVersion": 27,
+  "version": 0,
+  "links": []
+}

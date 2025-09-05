@@ -1,0 +1,15 @@
+apiVersion: 1
+
+playlists:
+  - name: "Ethereum Cluster Monitor"
+    interval: 30s
+    order:
+      - dashboard: "Ethereum Validator Cluster Overview"
+      - dashboard: "Rocketpool Validator Node"
+      - dashboard: "Lido CSM Node (templated)"
+      - dashboard: "Validator Cluster Performance"
+      - dashboard: "NodeSet Hyperdrive + StakeWise"
+      - dashboard: "EtherFi DVT Cluster"
+      - dashboard: "StakeWise Solo Validator Node - Ryzen7"
+      - dashboard: "Nethermind Execution Client"
+      - dashboard: "Nethermind UI"

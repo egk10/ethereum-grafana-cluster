@@ -1,0 +1,71 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "title": "Nethermind UI",
+      "type": "link",
+      "url": "http://100.67.5.3:8545",
+      "targetBlank": true
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<style>\n  /* Hide Grafana UI elements */\n  .navbar { display: none !important; }\n  .sidemenu { display: none !important; }\n  .panel-toolbar { display: none !important; }\n  .panel-title { display: none !important; }\n  .panel-header { display: none !important; }\n  .grafana-app { margin: 0 !important; padding: 0 !important; }\n  .dashboard-container { margin: 0 !important; padding: 0 !important; }\n  .react-grid-layout { margin: 0 !important; padding: 0 !important; }\n  .react-grid-item { margin: 0 !important; padding: 0 !important; }\n  .panel-container { margin: 0 !important; padding: 0 !important; }\n  \n  /* Full viewport override */\n  html, body {\n    margin: 0 !important;\n    padding: 0 !important;\n    overflow: hidden !important;\n    width: 100vw !important;\n    height: 100vh !important;\n  }\n</style>\n\n<div id='nethermind-container' style='position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; margin: 0; padding: 0; z-index: 999999; background: #1a1a1a;'>\n  <iframe id='nethermind-frame' \n          src='http://100.67.5.3:8545' \n          style='width: 100vw; height: 100vh; border: none; display: block; margin: 0; padding: 0; transform: scale(1.5); transform-origin: 0 0; overflow: hidden;'\n          frameborder='0'\n          allowfullscreen>\n    <div style='padding: 50px; text-align: center; font-family: Arial; font-size: 24px; color: white;'>\n      <h1>🔥 Nethermind UI Not Available</h1>\n      <p>Please access directly at: <a href='http://100.67.5.3:8545' target='_blank' style='color: #4a9eff;'>http://100.67.5.3:8545</a></p>\n    </div>\n  </iframe>\n</div>\n\n<script>\n  // Additional viewport manipulation\n  setTimeout(() => {\n    const iframe = document.getElementById('nethermind-frame');\n    if (iframe) {\n      iframe.style.transform = 'scale(2)';\n      iframe.style.transformOrigin = '0 0';\n    }\n  }, 2000);\n</script>",
+        "mode": "html"
+      },
+      "pluginVersion": "12.2.0-16979757807",
+      "title": "🔥 Nethermind Built-in UI Access",
+      "type": "text",
+      "gridPos": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [
+    "nethermind",
+    "ui",
+    "monitoring"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Nethermind UI",
+  "uid": "nethermind-ui",
+  "version": 4,
+  "weekStart": ""
+}
