@@ -9,7 +9,7 @@ echo "📋 Schedule: 5min Grafana → 5min Nethermind → repeat"
 # Function to switch to Grafana
 switch_to_grafana() {
     echo "$(date): 📊 Switching to Grafana..."
-    DISPLAY=:0 wmctrl -a "Grafana" || DISPLAY=:0 wmctrl -a "Validator Cluster Performance"
+    DISPLAY=:0 wmctrl -a "Grafana" || DISPLAY=:0 wmctrl -a "Dashboards"
 }
 
 # Function to switch to Nethermind

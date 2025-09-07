@@ -1,0 +1,16 @@
+[Unit]
+Description=Living Room Display Switcher
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+Type=simple
+User=egk
+WorkingDirectory=/home/egk/ethereum-grafana-cluster
+Environment=DISPLAY=:0
+ExecStart=/home/egk/ethereum-grafana-cluster/super-simple-switcher.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
