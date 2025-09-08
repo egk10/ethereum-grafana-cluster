@@ -1,43 +1,4 @@
-# Ethereum Grafana Clust✅ **Simple background** | ✅ **Good for testing**
-
-## 📦 Binary Releases
-
-**Download the latest release** from [GitHub Releases](https://github.com/egk10/ethereum-grafana-cluster/releases)
-
-### Installation from Binary Release
-
-1. **Download** the latest release archive (`.tar.gz` or `.zip`)
-2. **Extract** the archive:
-   ```bash
-   tar -xzf living-room-display-v1.0.0.tar.gz
-   cd release
-   ```
-3. **Run the installer**:
-   ```bash
-   ./install.sh
-   ```
-4. **Start the display**:
-   ```bash
-   cd ~/ethereum-grafana-cluster
-   ./start-persistent.sh
-   ```
-
-### Local Build
-
-To build release packages locally:
-
-```bash
-./build-release.sh [version]
-```
-
-Example:
-```bash
-./build-release.sh v1.0.1
-```
-
-This creates `.tar.gz` and `.zip` archives in the `dist/` directory.
-
-## 📋 Release NotesMonitor
+# Ethereum Grafana Cluster Monitor
 
 A comprehensive monitoring solution for Ethereum validator clusters with **automated living room display switching**.
 

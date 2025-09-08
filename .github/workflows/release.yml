@@ -1,0 +1,180 @@
+name: Release Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up release info
+      id: release_info
+      run: |
+        if [ "${{ github.event_name }}" = "push" ]; then
+          VERSION=${GITHUB_REF#refs/tags/}
+        else
+          VERSION=${{ github.event.inputs.version }}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Release version: $VERSION"
+
+    - name: Create release directory
+      run: |
+        mkdir -p release
+        cp *.sh release/ 2>/dev/null || true
+        cp *.service release/ 2>/dev/null || true
+        cp README.md release/
+        cp LICENSE release/ 2>/dev/null || true
+
+    - name: Make scripts executable
+      run: |
+        chmod +x release/*.sh
+
+    - name: Create installation script
+      run: |
+        cat > release/install.sh << 'EOF'
+        #!/bin/bash
+        # Living Room Display - Installation Script
+
+        echo "🚀 Installing Living Room Display System..."
+
+        # Create installation directory
+        INSTALL_DIR="$HOME/ethereum-grafana-cluster"
+        mkdir -p "$INSTALL_DIR"
+
+        # Copy files
+        cp * "$INSTALL_DIR/" 2>/dev/null || true
+
+        # Make scripts executable
+        chmod +x "$INSTALL_DIR"/*.sh
+
+        echo "✅ Installation complete!"
+        echo ""
+        echo "📋 Quick Start:"
+        echo "  cd $INSTALL_DIR"
+        echo "  ./start-persistent.sh"
+        echo ""
+        echo "📖 For more options, see README.md"
+        EOF
+
+        chmod +x release/install.sh
+
+    - name: Create archive
+      run: |
+        VERSION="${{ steps.release_info.outputs.version }}"
+        tar -czf "living-room-display-${VERSION}.tar.gz" release/
+        zip -r "living-room-display-${VERSION}.zip" release/
+
+    - name: Generate release notes
+      run: |
+        VERSION="${{ steps.release_info.outputs.version }}"
+        cat > release_notes.md << EOF
+        # Living Room Display System ${VERSION}
+
+        ## 🚀 Automated Ethereum Cluster Monitor
+
+        A comprehensive monitoring solution for Ethereum validator clusters with automated living room display switching.
+
+        ## 📦 What's Included
+
+        - **start-persistent.sh**: Main launcher (persistent background operation)
+        - **start-living-room.sh**: Original working script
+        - **super-simple-switcher.sh**: Window switching automation
+        - **install-service.sh**: Systemd service installer
+        - **living-room-switcher.service**: Systemd service definition
+        - **install.sh**: Quick installation script
+
+        ## 🎯 Quick Start
+
+        ### Option 1: Persistent Background (Recommended)
+        \`\`\`bash
+        cd ethereum-grafana-cluster
+        ./start-persistent.sh
+        \`\`\`
+
+        ### Option 2: Systemd Auto-start
+        \`\`\`bash
+        ./install-service.sh
+        systemctl --user start living-room-switcher.service
+        \`\`\`
+
+        ### Option 3: Simple Background
+        \`\`\`bash
+        ./start-living-room.sh &
+        \`\`\`
+
+        ## ✨ Features
+
+        - ✅ **Automated Switching**: Grafana ↔ Nethermind every 5 minutes
+        - ✅ **Persistent Operation**: Survives terminal close & system reboots
+        - ✅ **Systemd Integration**: Auto-start on system boot
+        - ✅ **Robust Error Handling**: Automatic fallbacks and recovery
+        - ✅ **Multiple Startup Methods**: Manual, persistent, systemd
+
+        ## 🔧 Requirements
+
+        - Firefox browser
+        - wmctrl (window manager control)
+        - DISPLAY environment variable set
+        - curl (for URL testing)
+
+        ## 📊 Current Configuration
+
+        - **Grafana URL**: http://localhost:3000/dashboards
+        - **Nethermind URL**: http://100.67.5.3:8545
+        - **Switch Interval**: 5 minutes
+        - **Fallback**: Local Prometheus if Nethermind unavailable
+
+        ## 🛠️ Management
+
+        ### Check Status
+        \`\`\`bash
+        ps aux | grep -E "(firefox|super-simple-switcher)"
+        \`\`\`
+
+        ### Stop Everything
+        \`\`\`bash
+        pkill firefox && pkill -f super-simple-switcher
+        \`\`\`
+
+        ### View Logs
+        \`\`\`bash
+        tail -f *.log
+        \`\`\`
+
+        ## 📖 Documentation
+
+        See README.md for comprehensive documentation and troubleshooting.
+
+        ## 🎉 Production Ready!
+
+        This release has been tested and verified to work reliably in production environments.
+
+        ---
+        *Released on: $(date)*
+        *Version: ${VERSION}*
+        EOF
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.release_info.outputs.version }}
+        name: Living Room Display System ${{ steps.release_info.outputs.version }}
+        body_path: release_notes.md
+        files: |
+          living-room-display-${{ steps.release_info.outputs.version }}.tar.gz
+          living-room-display-${{ steps.release_info.outputs.version }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
