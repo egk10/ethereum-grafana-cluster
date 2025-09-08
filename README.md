@@ -1,6 +1,71 @@
 # Ethereum Grafana Cluster Monitor
 
-A comprehensive monitoring solution for Ethereum validator clusters with automated living room display switching.
+A comprehensive monitoring solution for Ethereum validator clusters with **automated living room display switching**.
+
+## 🚀 Quick Start (3 Methods)
+
+### Method 1: Persistent Background (Recommended)
+```bash
+cd /home/egk/ethereum-grafana-cluster
+./start-persistent.sh
+```
+✅ **Survives terminal close** | ✅ **Auto-restarts** | ✅ **Production ready**
+
+### Method 2: Systemd Service (Auto-start on boot)
+```bash
+./install-service.sh
+systemctl --user start living-room-switcher.service
+```
+✅ **Starts automatically on boot** | ✅ **Managed by systemd**
+
+### Method 3: Manual Start
+```bash
+./start-living-room.sh &
+```
+✅ **Simple background** | ✅ **Good for testing**
+
+## � Release Notes
+
+### v1.0.0 - Living Room Display System 🎉
+**Released:** September 7, 2025
+
+✅ **Core Features:**
+- Automated switching between Grafana dashboards and Nethermind UI
+- Persistent background operation (survives terminal close)
+- Systemd service for auto-start on boot
+- Robust error handling and process management
+- Multiple startup methods (manual, persistent, systemd)
+
+✅ **New Files:**
+- `start-persistent.sh`: Main persistent launcher with nohup
+- `install-service.sh`: Systemd service installer
+- `living-room-switcher.service`: Systemd service definition
+- Updated `super-simple-switcher.sh`: Fixed window title matching
+
+✅ **Key Improvements:**
+- Processes remain running after terminal closes
+- Automatic restart on system boot
+- Better window title detection
+- Comprehensive logging
+- Multiple startup methods (manual, persistent, systemd)
+
+✅ **Tested & Verified:**
+- Background operation works correctly
+- Window switching every 5 minutes
+- Graceful error handling
+- Systemd integration functional
+
+🚀 **Ready for production use!**
+
+## 🎯 Features
+
+- **Multi-Node Monitoring**: Monitor multiple Ethereum nodes via Prometheus federation
+- **Grafana Dashboards**: Pre-configured dashboards for various Ethereum clients (Nethermind, Lighthouse, etc.)
+- **Living Room Display**: Automated switching between Grafana dashboards and Nethermind UI
+- **Persistent Operation**: Processes continue running after terminal closes
+- **Systemd Integration**: Auto-start on system boot
+- **Docker Compose**: Easy deployment with Docker Compose
+- **Tailscale Integration**: Secure remote access via Tailscale VPN
 
 ## Features
 
