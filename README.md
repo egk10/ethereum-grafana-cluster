@@ -2,21 +2,23 @@
 
 ## 📦 Binary Releases
 
-**Download the latest release** from [GitHub Releases](https://github.com/egk10/ethereum-grafana-cluster/releases)
+**Download the latest build** from [GitHub Actions](https://github.com/egk10/ethereum-grafana-cluster/actions)
 
-### Installation from Binary Release
+### Installation from GitHub Actions Artifact
 
-1. **Download** the latest release archive (`.tar.gz` or `.zip`)
-2. **Extract** the archive:
+1. **Go to Actions tab** in the repository
+2. **Find the latest successful workflow run** (triggered by version tag)
+3. **Download the artifact** named `living-room-display-vX.X.X`
+4. **Extract** the archive:
    ```bash
-   tar -xzf living-room-display-v1.0.0.tar.gz
+   tar -xzf living-room-display-v1.0.4.tar.gz
    cd release
    ```
-3. **Run the installer**:
+5. **Run the installer**:
    ```bash
    ./install.sh
    ```
-4. **Start the display**:
+6. **Start the display**:
    ```bash
    cd ~/ethereum-grafana-cluster
    ./start-persistent.sh
@@ -32,7 +34,7 @@ To build release packages locally:
 
 Example:
 ```bash
-./build-release.sh v1.0.1
+./build-release.sh v1.0.4
 ```
 
 This creates `.tar.gz` and `.zip` archives in the `dist/` directory.
