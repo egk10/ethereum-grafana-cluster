@@ -12,6 +12,8 @@ A simple living room display system for monitoring Ethereum validator clusters w
 ./display.sh p    # Pause switching (for editing Grafana)
 ./display.sh r    # Resume switching
 ./display.sh s    # Check status
+./display.sh start # Start the display system
+./display.sh stop  # Stop everything
 ```
 
 ## 📦 Installation
@@ -90,10 +92,13 @@ The system cycles through 6 windows:
 ## 🛑 Emergency Controls
 
 ```bash
-# Stop everything
+# Stop everything (stops systemd service + processes)
 ./display.sh stop
 
-# Or manually
+# Or manually stop service
+systemctl --user stop living-room-switcher.service
+
+# Kill processes (if service is stopped)
 pkill firefox && pkill -f advanced-switcher
 ```
 

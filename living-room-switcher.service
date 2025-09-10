@@ -1,16 +1,18 @@
 [Unit]
 Description=Living Room Display Switcher
-After=graphical.target
+After=graphical.target gnome-session-initialized.target
 Wants=graphical.target
+PartOf=gnome-session-initialized.target
+Before=gnome-session-initialized.target
 
 [Service]
+Slice=session.slice
 Type=simple
-User=%U
-WorkingDirectory=%h/ethereum-grafana-cluster
-Environment=DISPLAY=:0
-ExecStart=%h/ethereum-grafana-cluster/start-persistent.sh
+ExecStart=/home/egk/ethereum-grafana-cluster/wrapper.sh
 Restart=always
-RestartSec=5
+RestartSec=10
+TimeoutStopSec=5
+OOMScoreAdjust=-500
 
 [Install]
 WantedBy=default.target
