@@ -100,13 +100,16 @@ systemctl --user start living-room-switcher.service
 
 ## 🎯 Features
 
+- **8-Window Living Room Display**: Support for up to 8 Firefox windows with individual durations
+- **Custom Durations**: Each window can have its own display time (1-60 minutes)
+- **Enable/Disable Windows**: Turn windows on/off without removing configuration
 - **Multi-Node Monitoring**: Monitor multiple Ethereum nodes via Prometheus federation
 - **Grafana Dashboards**: Pre-configured dashboards for various Ethereum clients (Nethermind, Lighthouse, etc.)
-- **Living Room Display**: Automated switching between Grafana dashboards and Nethermind UI
 - **Persistent Operation**: Processes continue running after terminal closes
 - **Systemd Integration**: Auto-start on system boot
 - **Docker Compose**: Easy deployment with Docker Compose
 - **Tailscale Integration**: Secure remote access via Tailscale VPN
+- **Interactive Configuration**: Easy-to-use configuration helper script
 
 ## Features
 
@@ -206,8 +209,117 @@ The system is configured to automatically start on reboot:
 ### Current Status ✅
 - **Grafana**: Working perfectly at `http://localhost:3000/dashboards`
 - **Nethermind**: ✅ **WORKING** - Connected to `http://100.67.5.3:8545`
-- **Auto-Switching**: ✅ **WORKING** - Switches every 5 minutes between Grafana and Nethermind
+- **Auto-Switching**: ✅ **WORKING** - Switches every 5 minutes between 4 windows
 - **Background Mode**: ✅ **WORKING** - All methods tested and functional
+
+## 🎛️ Advanced Display Customization (Up to 8 Windows)
+
+The system now supports **up to 8 Firefox windows** with **individual durations** and **enable/disable controls**:
+
+### Interactive Configuration
+
+**Easiest Method - Interactive Helper:**
+```bash
+./configure.sh
+```
+
+This interactive tool lets you:
+- ✅ Enable/disable any of the 8 windows
+- ✅ Set custom durations for each window (1-60 minutes)
+- ✅ Change URLs and titles
+- ✅ View cycle time calculations
+- ✅ Reset to defaults
+
+### Manual Configuration
+
+Edit `display-config.sh` to customize:
+
+```bash
+# Enable/disable windows
+WINDOW_1_ENABLED=true   # Grafana Dashboard
+WINDOW_2_ENABLED=true   # Nethermind UI
+WINDOW_3_ENABLED=true   # Beaconcha.in Explorer
+WINDOW_4_ENABLED=true   # EthStats Metrics
+WINDOW_5_ENABLED=false  # Etherscan (disabled)
+WINDOW_6_ENABLED=false  # EtherNodes (disabled)
+WINDOW_7_ENABLED=false  # Custom URL (disabled)
+WINDOW_8_ENABLED=false  # Another Custom (disabled)
+
+# Set individual durations (in seconds)
+WINDOW_1_DURATION=300   # 5 minutes
+WINDOW_2_DURATION=300   # 5 minutes
+WINDOW_3_DURATION=240   # 4 minutes
+WINDOW_4_DURATION=240   # 4 minutes
+WINDOW_5_DURATION=180   # 3 minutes
+WINDOW_6_DURATION=180   # 3 minutes
+```
+
+### Pre-configured Window Options
+
+**Available Windows:**
+1. **Grafana Dashboard** - `http://localhost:3000/dashboards`
+2. **Nethermind UI** - `http://100.67.5.3:8545` (with Prometheus fallback)
+3. **Beaconcha.in Explorer** - `https://beaconcha.in/`
+4. **EthStats Metrics** - `https://ethstats.net/`
+5. **Etherscan** - `https://etherscan.io/`
+6. **EtherNodes Map** - `https://ethernodes.org/`
+7. **Custom URL** - Configure your own
+8. **Another Custom** - Additional custom URL
+
+### Advanced Settings
+
+```bash
+# Display settings
+DISPLAY=:0                    # X11 display number
+LOG_DIR="./logs"             # Log directory
+TRANSITION_DELAY=3           # Delay between switches (seconds)
+DEBUG_MODE=false             # Enable debug logging
+AUTO_RECOVERY=true           # Auto-restart on failures
+```
+
+### Example Configurations
+
+**Quick Monitoring (4 windows, 18 min cycle):**
+```bash
+WINDOW_1_ENABLED=true  # Grafana (5 min)
+WINDOW_2_ENABLED=true  # Nethermind (5 min)
+WINDOW_3_ENABLED=true  # Beaconcha.in (4 min)
+WINDOW_4_ENABLED=true  # EthStats (4 min)
+```
+
+**Extended Monitoring (6 windows, 26 min cycle):**
+```bash
+WINDOW_1_ENABLED=true  # Grafana (5 min)
+WINDOW_2_ENABLED=true  # Nethermind (5 min)
+WINDOW_3_ENABLED=true  # Beaconcha.in (4 min)
+WINDOW_4_ENABLED=true  # EthStats (4 min)
+WINDOW_5_ENABLED=true  # Etherscan (3 min)
+WINDOW_6_ENABLED=true  # EtherNodes (3 min)
+```
+
+**Minimal Setup (2 windows, 8 min cycle):**
+```bash
+WINDOW_1_ENABLED=true  # Grafana (4 min)
+WINDOW_2_ENABLED=true  # Nethermind (4 min)
+WINDOW_3_ENABLED=false # Disabled
+WINDOW_4_ENABLED=false # Disabled
+```
+
+### Testing Your Configuration
+
+**Test Configuration:**
+```bash
+./test-config.sh
+```
+
+**Test Switching Only:**
+```bash
+./advanced-switcher.sh
+```
+
+**Start Full Display:**
+```bash
+./start-persistent.sh
 
 ## Configuration
 
@@ -232,7 +344,13 @@ To add your Ethereum nodes to the monitoring:
 ├── eth-docker-configs/         # Configuration for eth-docker integration
 ├── ethereum-metrics/           # Ethereum metrics exporter config
 ├── start-living-room.sh        # Living room display starter script
-├── super-simple-switcher.sh    # Auto-switching script
+├── start-persistent.sh         # Persistent display starter with nohup
+├── super-simple-switcher.sh    # Basic window switcher
+├── advanced-switcher.sh        # Advanced switcher with custom durations
+├── display-config.sh           # Configuration file for all settings
+├── configure.sh                # Interactive configuration helper
+├── test-config.sh              # Configuration testing tool
+├── logs/                       # Log files directory (auto-created)
 └── validator-dashboard/        # Additional dashboard files
 ```
 
