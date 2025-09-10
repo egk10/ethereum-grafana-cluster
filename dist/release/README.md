@@ -14,30 +14,6 @@ A simple living room display system for monitoring Ethereum validator clusters w
 ./display.sh s    # Check status
 ```
 
-## 📦 Installation
-
-See [INSTALL.md](INSTALL.md) for detailed installation instructions including:
-- Download from GitHub Releases
-- Systemd service setup
-- Manual installation
-- Requirements and troubleshooting
-
-## 🎮 Control Systema Cluster Display
-
-A simple living room display system for monitoring Ethereum validator clusters with automated window switching.
-
-## 🚀 Quick Start
-
-```bash
-# Start the display system
-./start-persistent.sh
-
-# Control commands
-./display.sh p    # Pause switching (for editing Grafana)
-./display.sh r    # Resume switching
-./display.sh s    # Check status
-```
-
 ## � Control System
 
 ### Pause for Editing Grafana
