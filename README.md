@@ -13,8 +13,10 @@ A simple living room display system for monitoring Ethereum validator clusters w
 ./display.sh r    # Resume switching
 ./display.sh s    # Check status
 ./display.sh start # Start the display system
-./display.sh stop  # Stop everything
+./display.sh stop  # Stop everything (service stays stopped)
 ```
+
+**Note:** The service uses `Restart=never` - once stopped, it won't auto-restart until you explicitly start it again.
 
 ## 📦 Installation
 
@@ -39,6 +41,8 @@ A simple living room display system for monitoring Ethereum validator clusters w
 ./display.sh r    # Resume switching
 ./display.sh s    # Check status
 ```
+
+**Note:** The service uses `Restart=never` - once stopped, it won't auto-restart until you explicitly start it again.
 
 ## � Control System
 
@@ -98,9 +102,17 @@ The system cycles through 6 windows:
 # Or manually stop service
 systemctl --user stop living-room-switcher.service
 
-# Kill processes (if service is stopped)
+# Kill processes (service stays stopped with Restart=never)
 pkill firefox && pkill -f advanced-switcher
 ```
+
+## 🔄 Service Behavior (Restart=never)
+
+The systemd service is configured with `Restart=never` for better control:
+- ✅ **No auto-restart** when processes are killed
+- ✅ **Service stays stopped** until explicitly started
+- ✅ **Full user control** over start/stop timing
+- ✅ **Clean shutdown** when processes exit
 
 ## 📊 Monitoring
 
