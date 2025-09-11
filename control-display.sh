@@ -61,12 +61,12 @@ case $COMMAND in
         echo "Commands:"
         echo "  pause   - Pause automatic window switching"
         echo "  resume  - Resume automatic window switching"
-        echo "  status  - Show current switching status"
+        echo "  status  - Show current switching status (with process info)"
         echo "  stop    - Stop all display processes"
         echo ""
         echo "Examples:"
         echo "  $0 pause   # Pause switching to edit Grafana"
         echo "  $0 resume  # Resume switching after editing"
-        echo "  $0 status  # Check if switching is active"
+        echo "  $0 status  # Check if switching is active (shows process count)"
         ;;
 esac

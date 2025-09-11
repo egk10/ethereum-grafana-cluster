@@ -62,7 +62,7 @@ A simple living room display system for monitoring Ethereum validator clusters w
 ```bash
 ./display.sh s
 ```
-📊 **Shows current state** - active or paused
+📊 **Shows accurate system state** - active, paused, or stopped with process count
 
 ## 📋 Window Configuration
 
