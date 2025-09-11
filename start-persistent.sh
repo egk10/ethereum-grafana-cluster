@@ -67,10 +67,11 @@ for i in $ENABLED_WINDOWS; do
 
     if [ "$i" -eq 1 ]; then
         # First window in kiosk mode with main profile (preserves passwords/sync)
-        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+        # Simplified graphics settings to avoid black screen
+        DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     else
         # Subsequent windows in new window kiosk mode with main profile
-        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --new-window --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+        DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --new-window --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     fi
 
     # Wait between launches
