@@ -154,6 +154,10 @@ sleep $TRANSITION_DELAY
 # Main switching loop
 while true; do
     for window_num in $ENABLED_WINDOWS; do
+        # Switch to this window first
+        switch_to_window "$window_num"
+        sleep $TRANSITION_DELAY
+
         duration_var="WINDOW_${window_num}_DURATION"
         duration=${!duration_var}
         title_var="WINDOW_${window_num}_TITLE"
@@ -163,19 +167,7 @@ while true; do
 
         # Wait for the specified duration
         sleep "$duration"
-
-        # Switch to next window (will be handled in next iteration)
-        # The switch happens at the beginning of each iteration
     done
-
-    # Switch to first window to complete the cycle (only if not paused)
-    if ! is_paused; then
-        switch_to_window "$FIRST_WINDOW"
-        sleep $TRANSITION_DELAY
-    else
-        log_message "INFO" "⏸️  Cycle completed but switching is paused - waiting..."
-        sleep 30  # Check every 30 seconds if pause is still active
-    fi
 
     log_message "INFO" "🔄 Cycle completed - starting over..."
 done
