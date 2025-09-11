@@ -21,14 +21,29 @@ case $COMMAND in
         echo "✅ Switching resumed. Windows will switch automatically again."
         ;;
     "status")
-        if [ -f "$PAUSE_FILE" ]; then
-            echo "⏸️  STATUS: Switching is PAUSED"
-            echo "📝 You can safely edit Grafana dashboards"
-            echo "💡 Run '$0 resume' to restart switching"
+        # Check if processes are actually running
+        RUNNING_PROCESSES=$(ps aux | grep -E "(firefox|start-persistent|advanced-switcher)" | grep -v grep | wc -l)
+        SERVICE_ACTIVE=$(systemctl --user is-active living-room-switcher.service 2>/dev/null || echo "inactive")
+
+        if [ "$SERVICE_ACTIVE" = "active" ] && [ "$RUNNING_PROCESSES" -gt 0 ]; then
+            if [ -f "$PAUSE_FILE" ]; then
+                echo "⏸️  STATUS: Switching is PAUSED (processes running)"
+                echo "📝 You can safely edit Grafana dashboards"
+                echo "💡 Run '$0 resume' to restart switching"
+            else
+                echo "▶️  STATUS: Switching is ACTIVE"
+                echo "🔄 Windows are switching automatically"
+                echo "💡 Run '$0 pause' to pause for editing"
+            fi
+            echo "🖥️  Running processes: $RUNNING_PROCESSES"
+        elif [ "$SERVICE_ACTIVE" = "active" ] && [ "$RUNNING_PROCESSES" -eq 0 ]; then
+            echo "⚠️  STATUS: Service active but no processes running"
+            echo "🔄 Service is running but display windows may have crashed"
+            echo "💡 Try restarting: systemctl --user restart living-room-switcher.service"
         else
-            echo "▶️  STATUS: Switching is ACTIVE"
-            echo "🔄 Windows are switching automatically"
-            echo "💡 Run '$0 pause' to pause for editing"
+            echo "❌ STATUS: Display system is STOPPED"
+            echo "🛑 No processes running, service inactive"
+            echo "💡 Start with: ./display.sh start"
         fi
         ;;
     "stop")
