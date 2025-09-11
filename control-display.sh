@@ -51,8 +51,8 @@ case $COMMAND in
         pkill firefox
         pkill -f advanced-switcher
         # Clean up Firefox lock files
-        rm -f /home/egk/.mozilla/firefox/display-profile/lock
-        rm -f /home/egk/.mozilla/firefox/display-profile/.parentlock
+        rm -f /home/egk/.mozilla/firefox/widltds1.default-release/lock
+        rm -f /home/egk/.mozilla/firefox/widltds1.default-release/.parentlock
         rm -f "$PAUSE_FILE"
         echo "✅ All processes stopped and lock files cleaned."
         ;;

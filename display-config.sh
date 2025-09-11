@@ -65,14 +65,14 @@ mkdir -p "$LOG_DIR"
 TRANSITION_DELAY=3
 
 # Enable/disable debug logging
-DEBUG_MODE=false
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        DEBUG_MODE=false
 
 # Auto-restart on window switch failure
 AUTO_RECOVERY=true
 
 # ===== FIREFOX PROFILE SETTINGS =====
-# Dedicated Firefox profile for display system (prevents conflicts with user Firefox)
-FIREFOX_PROFILE_PATH="/home/egk/.mozilla/firefox/display-profile"
+# Uses main Firefox profile to preserve passwords, bookmarks, and sync
+FIREFOX_PROFILE_PATH="/home/egk/.mozilla/firefox/widltds1.default-release"
 
 # Clean profile on startup (set to true if having issues with corrupted profile)
 CLEAN_FIREFOX_PROFILE=false

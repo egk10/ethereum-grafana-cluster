@@ -23,8 +23,8 @@ pkill -f advanced-switcher
 echo "🧹 Cleaning up Firefox lock files..."
 rm -f /home/egk/.mozilla/firefox/*/lock
 rm -f /home/egk/.mozilla/firefox/*/.parentlock
-rm -f /home/egk/.mozilla/firefox/display-profile/lock
-rm -f /home/egk/.mozilla/firefox/display-profile/.parentlock
+rm -f /home/egk/.mozilla/firefox/widltds1.default-release/lock
+rm -f /home/egk/.mozilla/firefox/widltds1.default-release/.parentlock
 find /home/egk/.mozilla/firefox -name "lock" -delete 2>/dev/null
 find /home/egk/.mozilla/firefox -name ".parentlock" -delete 2>/dev/null
 
@@ -66,11 +66,11 @@ for i in $ENABLED_WINDOWS; do
     echo "🌐 Starting Window $i: $title ($url)"
 
     if [ "$i" -eq 1 ]; then
-        # First window in kiosk mode with dedicated profile
-        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/display-profile --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+        # First window in kiosk mode with main profile (preserves passwords/sync)
+        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     else
-        # Subsequent windows in new window kiosk mode with dedicated profile
-        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/display-profile --new-window --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+        # Subsequent windows in new window kiosk mode with main profile
+        DISPLAY=$DISPLAY nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --new-window --kiosk "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     fi
 
     # Wait between launches

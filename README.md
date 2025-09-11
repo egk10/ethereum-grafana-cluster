@@ -116,11 +116,21 @@ The systemd service is configured with `Restart=never` for better control:
 
 ## 🦊 Firefox Profile Management
 
-The system uses a dedicated Firefox profile to prevent conflicts:
-- ✅ **Separate profile** (`/home/egk/.mozilla/firefox/display-profile`)
-- ✅ **No interference** with your regular Firefox usage
-- ✅ **Automatic cleanup** of lock files on startup
-- ✅ **Profile reset option** in `display-config.sh` if needed
+The system uses your **main Firefox profile** to preserve functionality:
+- ✅ **Passwords & autofill** - All your saved passwords work
+- ✅ **Firefox sync** - Bookmarks, history, and settings sync
+- ✅ **Bookmarks** - Access to all your saved bookmarks
+- ✅ **Extensions** - Your Firefox extensions are available
+
+**Note**: This means the display system shares your regular Firefox profile. If you need to use Firefox manually while the display is running, consider pausing the display first.
+
+```bash
+# Pause display before using Firefox manually
+./display.sh p
+
+# Resume display when done
+./display.sh r
+```
 
 ## 📊 Monitoring
 
