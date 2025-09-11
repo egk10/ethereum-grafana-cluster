@@ -114,6 +114,14 @@ The systemd service is configured with `Restart=never` for better control:
 - ✅ **Full user control** over start/stop timing
 - ✅ **Clean shutdown** when processes exit
 
+## 🦊 Firefox Profile Management
+
+The system uses a dedicated Firefox profile to prevent conflicts:
+- ✅ **Separate profile** (`/home/egk/.mozilla/firefox/display-profile`)
+- ✅ **No interference** with your regular Firefox usage
+- ✅ **Automatic cleanup** of lock files on startup
+- ✅ **Profile reset option** in `display-config.sh` if needed
+
 ## 📊 Monitoring
 
 ```bash
