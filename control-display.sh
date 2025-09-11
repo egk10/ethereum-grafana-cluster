@@ -50,8 +50,11 @@ case $COMMAND in
         echo "🛑 STOPPING living room display..."
         pkill firefox
         pkill -f advanced-switcher
+        # Clean up Firefox lock files
+        rm -f /home/egk/.mozilla/firefox/display-profile/lock
+        rm -f /home/egk/.mozilla/firefox/display-profile/.parentlock
         rm -f "$PAUSE_FILE"
-        echo "✅ All processes stopped."
+        echo "✅ All processes stopped and lock files cleaned."
         ;;
     *)
         echo "🎮 Living Room Display Control Panel"
