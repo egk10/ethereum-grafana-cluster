@@ -121,6 +121,7 @@ The system uses your **main Firefox profile** to preserve functionality:
 - ✅ **Firefox sync** - Bookmarks, history, and settings sync
 - ✅ **Bookmarks** - Access to all your saved bookmarks
 - ✅ **Extensions** - Your Firefox extensions are available
+- ✅ **Graphics optimized** - Hardware acceleration disabled for compatibility
 
 **Note**: This means the display system shares your regular Firefox profile. If you need to use Firefox manually while the display is running, consider pausing the display first.
 
@@ -131,6 +132,20 @@ The system uses your **main Firefox profile** to preserve functionality:
 # Resume display when done
 ./display.sh r
 ```
+
+## 🐛 Troubleshooting
+
+### Black Screen Issues
+If you see a black screen, the system automatically applies graphics fixes:
+- Disables hardware acceleration (`MOZ_DISABLE_GPU=1`)
+- Uses software rendering for compatibility
+- Prevents conflicts with existing Firefox instances
+
+### Firefox Conflicts
+The system prevents "already running" errors by:
+- Cleaning Firefox lock files on startup
+- Using `--no-remote` flag
+- Proper process management
 
 ## 📊 Monitoring
 
