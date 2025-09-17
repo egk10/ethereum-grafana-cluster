@@ -15,6 +15,15 @@ scrape_configs:
       - targets: ['ethereum-metrics:9090']
     scrape_interval: 60s
 
+  # Ceph cluster metrics from eliedesk manager
+  - job_name: 'ceph-cluster'
+    static_configs:
+      - targets: ['eliedesk:9283']
+    scrape_interval: 30s
+    relabel_configs:
+      - target_label: cluster_name
+        replacement: 'homelab-ceph'
+
   # ===== HARDWARE MONITORING (All 5 Validator Nodes) =====
   - job_name: 'rocketpool-hardware'
     static_configs:

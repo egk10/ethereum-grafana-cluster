@@ -43,11 +43,11 @@ WINDOW_6_URL="http://100.72.3.103:3101/d/bc03a2d2-f7f7-4ac5-bfe4-e10720d6fbac/ro
 WINDOW_6_TITLE="Rocketpool Minipool"
 WINDOW_6_DURATION=60
 
-# Window 7: Custom Dashboard/URL
-WINDOW_7_ENABLED=false
-WINDOW_7_URL="https://your-custom-url.com"
-WINDOW_7_TITLE="Custom"
-WINDOW_7_DURATION=60  # 1 minute
+# Window 7: Ceph Cluster Dashboard
+WINDOW_7_ENABLED=true
+WINDOW_7_URL="http://localhost:3000/d/ceph-cluster-living-room/ceph-storage-cluster-living-room?orgId=1&refresh=30s&from=now-1h&to=now&kiosk=tv"
+WINDOW_7_TITLE="🗄️ Ceph Storage Cluster"
+WINDOW_7_DURATION=90  # 1.5 minutes - longer for storage metrics
 
 # Window 8: Another Custom URL
 WINDOW_8_ENABLED=false
