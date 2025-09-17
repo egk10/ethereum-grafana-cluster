@@ -31,15 +31,15 @@ WINDOW_4_URL="http://100.72.3.103:3001/d/d6qujIJVk/charon-overview?var-interval=
 WINDOW_4_TITLE="Charon-Etherfi-BR"
 WINDOW_4_DURATION=60
 
-# Window 5: Rocketpool-stats Dashboard
+# Window 5: Beaconcha in Nodeset
 WINDOW_5_ENABLED=true
-WINDOW_5_URL="http://100.72.3.103:3101/d/ef556260-2c7f-49ea-a446-7aa1d8a3306b/rocket-pool-dashboard-v1-3-3-provisioned-copy?orgId=1&refresh=30s"
-WINDOW_5_TITLE="Rocketpool-stats"
+WINDOW_5_URL="https://beaconcha.in/dashboard/v-d0e5902b-d62b-4da1-b677-a85b77979491"
+WINDOW_5_TITLE="Beaconcha in Nodeset"
 WINDOW_5_DURATION=60
 
 # Window 6: Rocketpool Minipool Dashboard
 WINDOW_6_ENABLED=true
-WINDOW_6_URL="http://100.72.3.103:3101/d/bc03a2d2-f7f7-4ac5-bfe4-e10720d6fbac/rocket-pool-dashboard-v1-3-3-provisioned-copy-copy?orgId=1&refresh=30s"
+WINDOW_6_URL="http://100.72.3.103:3101/d/f1e28493-0757-4051-be71-65ef20079d26/rocket-pool-dashboard-v1-3-2-provisioned?orgId=1&refresh=30s"
 WINDOW_6_TITLE="Rocketpool Minipool"
 WINDOW_6_DURATION=60
 
@@ -47,12 +47,12 @@ WINDOW_6_DURATION=60
 WINDOW_7_ENABLED=true
 WINDOW_7_URL="http://localhost:3000/d/ceph-cluster-living-room/ceph-storage-cluster-living-room?orgId=1&refresh=30s&from=now-1h&to=now&kiosk=tv"
 WINDOW_7_TITLE="🗄️ Ceph Storage Cluster"
-WINDOW_7_DURATION=90  # 1.5 minutes - longer for storage metrics
+WINDOW_7_DURATION=60  # 1.5 minutes - longer for storage metrics
 
-# Window 8: Another Custom URL
-WINDOW_8_ENABLED=false
-WINDOW_8_URL="https://another-custom-url.com"
-WINDOW_8_TITLE="Custom2"
+# Window 8: Beaconcha in Lido
+WINDOW_8_ENABLED=true
+WINDOW_8_URL="https://beaconcha.in/dashboard/v-b8a9d009-23ef-4527-89c1-15de538f94ff"
+WINDOW_8_TITLE="Lido Beaconha.in"
 WINDOW_8_DURATION=60  # 5 minutes
 
 # ===== DISPLAY SETTINGS =====
