@@ -12,7 +12,7 @@ datasources:
   - name: Charon Prometheus
     type: prometheus
     access: proxy
-    url: http://100.72.3.103:9092
+    url: http://charon-prometheus.example.tailnet:9092
     uid: charon-prometheus
     isDefault: false
     editable: false
@@ -20,7 +20,7 @@ datasources:
   - name: Charon Grafana
     type: grafana
     access: proxy
-    url: http://100.72.3.103:3001
+    url: http://charon-grafana.example.tailnet:3001
     uid: charon-grafana
     isDefault: false
     editable: false
@@ -28,7 +28,7 @@ datasources:
   - name: Nethermind Prometheus
     type: prometheus
     access: proxy
-    url: http://100.67.5.3:9090
+    url: http://nethermind-prometheus.example.tailnet:9090
     uid: nethermind-prometheus
     isDefault: false
     editable: false

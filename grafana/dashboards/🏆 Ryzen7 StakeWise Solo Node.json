@@ -65,7 +65,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# 🖥️ RYZEN7 STAKEWISE SOLO VALIDATOR NODE\n\n**Node**: minipcamd4.velociraptor-scylla.ts.net | **Protocol**: StakeWise Solo | **Clients**: Erigon + Grandine + Vero",
+  "content": "# 🖥️ RYZEN7 STAKEWISE SOLO VALIDATOR NODE\n\n**Node**: validator-node.example.tailnet | **Protocol**: StakeWise Solo | **Clients**: Erigon + Grandine + Vero",
         "mode": "markdown"
       },
       "pluginVersion": "11.0.0",

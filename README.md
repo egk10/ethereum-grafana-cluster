@@ -1,168 +1,89 @@
 # Ethereum Grafana Cluster Display
 
-A simple living room display system for monitoring Ethereum validator clusters with automated window switching.
+A living-room friendly dashboard rotation for monitoring the Ethereum validator cluster that runs across your Tailscale-connected homelab. Firefox kiosk windows cycle through Grafana, client UIs, and beacon monitoring dashboards, while `display.sh` gives you a single entry point for pausing, resuming, and supervising the setup.
 
-## 🚀 Quick Start
-
-```bash
-# Start the display system
-./start-persistent.sh
-
-# Control commands
-./display.sh p    # Pause switching (for editing Grafana)
-./display.sh r    # Resume switching
-./display.sh s    # Check status
-./display.sh start # Start the display system
-./display.sh stop  # Stop everything (service stays stopped)
-```
-
-**Note:** The service uses `Restart=never` - once stopped, it won't auto-restart until you explicitly start it again.
-
-## 📦 Installation
-
-See [INSTALL.md](INSTALL.md) for detailed installation instructions including:
-- Download from GitHub Releases
-- Systemd service setup
-- Manual installation
-- Requirements and troubleshooting
-
-## 🎮 Control Systema Cluster Display
-
-A simple living room display system for monitoring Ethereum validator clusters with automated window switching.
-
-## 🚀 Quick Start
+## 🏁 Quick Start
 
 ```bash
-# Start the display system
-./start-persistent.sh
+# Optional one-time setup – install the user service
+./scripts/install-service.sh
 
-# Control commands
-./display.sh p    # Pause switching (for editing Grafana)
-./display.sh r    # Resume switching
-./display.sh s    # Check status
+# Start the rotating display (launches the systemd user service)
+./display.sh start
+
+# Day-to-day controls
+./display.sh p   # Pause switching to edit dashboards
+./display.sh r   # Resume the rotation
+./display.sh s   # Show current status
+./display.sh stop  # Stop Firefox + switcher processes
 ```
 
-**Note:** The service uses `Restart=never` - once stopped, it won't auto-restart until you explicitly start it again.
+Behind the scenes the `living-room-switcher.service` unit invokes `scripts/start-persistent.sh`, which launches Firefox kiosks according to `display-config.sh` and hands control to `scripts/advanced-switcher.sh`. The service is configured with `Restart=never`, so a manual `./display.sh start` (or `systemctl --user start living-room-switcher.service`) is required after any stop.
 
-## � Control System
+## 🧭 Controlling the Display
 
-### Pause for Editing Grafana
-```bash
-./display.sh p
-```
-✅ **Safe to edit Grafana dashboards** - switching stops automatically
+| Command | When to use it | What it does |
+| --- | --- | --- |
+| `./display.sh start` | When you want the display running | Starts the systemd user service, which launches Firefox windows and the switcher |
+| `./display.sh p` | Before editing Grafana, Rocketpool, etc. | Drops a pause flag so `scripts/advanced-switcher.sh` holds the current window |
+| `./display.sh r` | After you're done editing | Removes the pause flag and resumes automatic switching |
+| `./display.sh s` | Any time you need a heartbeat | Reports whether the service is active, if switching is paused, and how many processes are alive |
+| `./display.sh stop` | To clear the display or debug | Stops Firefox, the switcher, and removes the pause flag |
 
-### Resume Switching
-```bash
-./display.sh r
-```
-✅ **Normal switching resumes** - seamless continuation
+`scripts/control-display.sh` contains the underlying pause/resume logic and keeps the state in `/tmp/living-room-display-pause`, so you can integrate the same flow in other automation if needed.
 
-### Check Status
-```bash
-./display.sh s
-```
-📊 **Shows accurate system state** - active, paused, or stopped with process count
+## 🪟 Window Rotation (defaults)
 
-## 📋 Window Configuration
+Start from [`config/display-config.sample.sh`](./config/display-config.sample.sh) and copy it to `display-config.sh` for your local deployment. Durations are defined in seconds; the current sample values are one minute per view so the full loop resets every eight minutes.
 
-The system cycles through 6 windows:
-- 🖥️ **Grafana Dashboard** (5 min) - `http://localhost:3000/dashboards`
-- 🖥️ **Nethermind UI** (3 min) - `http://100.67.5.3:8545`
-- 🖥️ **Beaconcha.in** (2 min) - `https://beaconcha.in/`
-- 🖥️ **Charon-Etherfi-BR** (2 min) - Custom dashboard
-- 🖥️ **Rocketpool-stats** (1 min) - Custom dashboard
-- 🖥️ **Rocketpool Minipool** (1 min) - Custom dashboard
+| Slot | Title | Default Duration | Example URL (replace with yours) |
+| --- | --- | --- | --- |
+| 1 | Grafana | 60 s | `http://localhost:3000/dashboards` |
+| 2 | Nethermind UI | 60 s | `http://nethermind.example.tailnet:8545` |
+| 3 | Beaconcha.in | 60 s | `https://beaconcha.in/` |
+| 4 | Charon Cluster | 60 s | `http://charon-grafana.example.tailnet:3001/d/charon-overview?orgId=1&refresh=1m` |
+| 5 | Beaconcha.in Alt | 60 s | `https://beaconcha.in/` |
+| 6 | Rocketpool | 60 s | `http://rocketpool-grafana.example.tailnet:3101/d/rocketpool-dashboard?orgId=1&refresh=30s` |
+| 7 | 🗄️ Ceph Storage Cluster | 60 s | `https://ceph-dashboard.example.tailnet:8443/#/dashboard` |
+| 8 | Beaconcha.in Extra | 60 s | `https://beaconcha.in/` |
 
-**Total cycle time: 14 minutes**
+To adjust the loop, toggle `WINDOW_X_ENABLED`, change URLs, or extend `WINDOW_X_DURATION` in `display-config.sh`. Replace the example hostnames with your own Tailscale MagicDNS names or internal services. The switcher automatically skips any slots marked `false`.
 
-## 🎯 Key Features
+## 🧰 Files that matter
 
-- ✅ **Automated switching** between monitoring dashboards
-- ✅ **Pause/resume system** for safe Grafana editing
-- ✅ **Persistent operation** (survives terminal close)
-- ✅ **Custom durations** for each window
-- ✅ **Comprehensive logging** in `logs/` directory
+- `display.sh` – primary operator interface for start/pause/resume/stop
+- `scripts/advanced-switcher.sh` – wmctrl-based window focus sequencer with pause awareness
+- `display-config.sh` – local-only file (gitignored) with URLs, durations, and Firefox profile settings
+- `config/display-config.sample.sh` – sanitized template to copy for new deployments
+- `scripts/start-persistent.sh` – launches Firefox kiosk sessions and invokes the switcher (called by the service)
+- `systemd/living-room-switcher.service` – user-level systemd unit used by `display.sh start`
+- `scripts/install-service.sh` – installs and enables the systemd unit in `~/.config/systemd/user`
+- `logs/` – per-window Firefox output plus `switcher.log`
 
-## 📁 Files
+The historical helper scripts (`configure.sh`, `start-living-room.sh`, `super-simple-switcher.sh`, `test-config.sh`) were removed because they were empty and unused.
 
-- `start-persistent.sh` - Main launcher
-- `display.sh` - Quick control commands
-- `control-display.sh` - Full control panel
-- `advanced-switcher.sh` - Smart window switcher
-- `display-config.sh` - Configuration settings
-- `DISPLAY-CONTROL-README.md` - Detailed documentation
+## 🔎 Monitoring & Troubleshooting
 
-## 🛑 Emergency Controls
+- View switcher logs: `tail -f logs/switcher.log`
+- Watch Firefox/stdout noise: `tail -f logs/*.log`
+- Inspect the service: `systemctl --user status living-room-switcher.service`
+- Follow service journal: `journalctl --user -u living-room-switcher.service -f`
 
-```bash
-# Stop everything (stops systemd service + processes)
-./display.sh stop
+If you need to interact with Firefox manually, run `./display.sh p` first so window focus does not jump away mid-edit.
 
-# Or manually stop service
-systemctl --user stop living-room-switcher.service
+## 📦 Installation notes
 
-# Kill processes (service stays stopped with Restart=never)
-pkill firefox && pkill -f advanced-switcher
-```
+[INSTALL.md](./INSTALL.md) documents the full install flow (manual setup, requirements, systemd enablement). After running `./scripts/install-service.sh` once, subsequent boots will start the display automatically.
 
-## 🔄 Service Behavior (Restart=never)
+## ✅ Requirements
 
-The systemd service is configured with `Restart=never` for better control:
-- ✅ **No auto-restart** when processes are killed
-- ✅ **Service stays stopped** until explicitly started
-- ✅ **Full user control** over start/stop timing
-- ✅ **Clean shutdown** when processes exit
+- Ubuntu Server 24.04+ with an X11 session on the Orange Pi 5 living-room display
+- Firefox (kiosk mode capable)
+- `wmctrl` for window management
+- Tailscale connectivity to reach Grafana, Nethermind, Rocketpool, and Ceph dashboards
 
-## 🦊 Firefox Profile Management
+Hardware acceleration is disabled (`MOZ_DISABLE_GPU=1`) for reliability, and the main Firefox profile (`widltds1.default-release`) is reused so saved passwords, sync, and extensions keep working.
 
-The system uses your **main Firefox profile** to preserve functionality:
-- ✅ **Passwords & autofill** - All your saved passwords work
-- ✅ **Firefox sync** - Bookmarks, history, and settings sync
-- ✅ **Bookmarks** - Access to all your saved bookmarks
-- ✅ **Extensions** - Your Firefox extensions are available
-- ✅ **Graphics optimized** - Hardware acceleration disabled for compatibility
+---
 
-**Note**: This means the display system shares your regular Firefox profile. If you need to use Firefox manually while the display is running, consider pausing the display first.
-
-```bash
-# Pause display before using Firefox manually
-./display.sh p
-
-# Resume display when done
-./display.sh r
-```
-
-## 🐛 Troubleshooting
-
-### Black Screen Issues
-If you see a black screen, the system automatically applies graphics fixes:
-- Disables hardware acceleration (`MOZ_DISABLE_GPU=1`)
-- Uses software rendering for compatibility
-- Prevents conflicts with existing Firefox instances
-
-### Firefox Conflicts
-The system prevents "already running" errors by:
-- Cleaning Firefox lock files on startup
-- Using `--no-remote` flag
-- Proper process management
-
-## 📊 Monitoring
-
-```bash
-# Check running processes
-ps aux | grep -E '(firefox|advanced-switcher)'
-
-# View logs
-tail -f logs/switcher.log
-```
-
-## ⚙️ Requirements
-
-- Ubuntu Linux with X11
-- Firefox browser
-- wmctrl (for window control)
-
-## 🔧 Advanced Usage
-
-See `DISPLAY-CONTROL-README.md` for detailed documentation and advanced configuration options.
+This repository powers the living-room Grafana display for the Ethereum validator cluster. With the cleanup complete, `display.sh` is the canonical entry point; build artifacts and obsolete shells have been removed to keep maintenance simple.

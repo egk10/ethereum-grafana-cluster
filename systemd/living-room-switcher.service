@@ -8,7 +8,7 @@ Before=gnome-session-initialized.target
 [Service]
 Slice=session.slice
 Type=simple
-ExecStart=/home/egk/ethereum-grafana-cluster/wrapper.sh
+ExecStart=/home/egk/ethereum-grafana-cluster/scripts/wrapper.sh
 Restart=never
 RestartSec=10
 TimeoutStopSec=5

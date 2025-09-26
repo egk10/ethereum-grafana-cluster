@@ -2,6 +2,9 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
+# NOTE: Replace the *.example.tailnet hostnames below with your own
+# Tailscale MagicDNS names or internal endpoints before deploying.
+
 scrape_configs:
   # Orange Pi 5 Dashboard system metrics (local)
   - job_name: 'orange-pi-dashboard'
@@ -15,10 +18,10 @@ scrape_configs:
       - targets: ['ethereum-metrics:9090']
     scrape_interval: 60s
 
-  # Ceph cluster metrics from eliedesk manager
+  # Ceph cluster metrics from the dashboard node
   - job_name: 'ceph-cluster'
     static_configs:
-      - targets: ['eliedesk:9283']
+      - targets: ['ceph-manager.example.tailnet:9283']
     scrape_interval: 30s
     relabel_configs:
       - target_label: cluster_name
@@ -27,7 +30,7 @@ scrape_configs:
   # ===== HARDWARE MONITORING (All 5 Validator Nodes) =====
   - job_name: 'rocketpool-hardware'
     static_configs:
-      - targets: ['100.72.3.103:9100']
+      - targets: ['rocketpool-node.example.tailnet:9100']
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -37,7 +40,7 @@ scrape_configs:
 
   - job_name: 'etherfi-hardware'
     static_configs:
-      - targets: ['100.99.2.41:9100']
+      - targets: ['etherfi-node.example.tailnet:9100']
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -47,7 +50,7 @@ scrape_configs:
 
   - job_name: 'lido102-hardware'
     static_configs:
-      - targets: ['100.67.5.3:9100']
+      - targets: ['lido102-node.example.tailnet:9100']
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -57,7 +60,7 @@ scrape_configs:
 
   - job_name: 'lido188-hardware'
     static_configs:
-      - targets: ['100.124.154.28:9100']
+      - targets: ['lido188-node.example.tailnet:9100']
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -67,7 +70,7 @@ scrape_configs:
 
   - job_name: 'nodeset-hardware'
     static_configs:
-      - targets: ['100.97.69.9:9100']
+      - targets: ['nodeset-node.example.tailnet:9100']
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -75,7 +78,7 @@ scrape_configs:
   # NodeSet StakeWise Validator Client Direct Scrape
   - job_name: 'nodeset-stakewise-daemon'
     static_configs:
-      - targets: ['100.97.69.9:8180']
+      - targets: ['nodeset-node.example.tailnet:8180']
     scrape_interval: 30s
     relabel_configs:
       - target_label: node_name
@@ -85,7 +88,7 @@ scrape_configs:
 
   - job_name: 'ryzen7-hardware'
     static_configs:
-      - targets: ['100.90.57.27:9100']  # minipcamd4
+      - targets: ['ryzen7-node.example.tailnet:9100']  # minipcamd4
     scrape_interval: 15s
     relabel_configs:
       - target_label: node_name
@@ -95,7 +98,7 @@ scrape_configs:
 
   - job_name: 'ryzen7-vero'
     static_configs:
-      - targets: ['100.90.57.27:8009']  # minipcamd4
+      - targets: ['ryzen7-node.example.tailnet:8009']  # minipcamd4
     scrape_interval: 30s
     relabel_configs:
       - target_label: node_name
@@ -127,7 +130,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.72.3.103:9090']
+      - targets: ['rocketpool-node.example.tailnet:9090']
     relabel_configs:
       - target_label: node_name
         replacement: 'rocketpool'
@@ -158,7 +161,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.99.2.41:9090']
+      - targets: ['etherfi-node.example.tailnet:9090']
     relabel_configs:
       - target_label: node_name
         replacement: 'etherfi'
@@ -193,7 +196,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.67.5.3:9090']
+      - targets: ['lido102-node.example.tailnet:9090']
     relabel_configs:
       - target_label: node_name
         replacement: 'lido102'
@@ -228,7 +231,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.124.154.28:9090']
+      - targets: ['lido188-node.example.tailnet:9090']
     relabel_configs:
       - target_label: node_name
         replacement: 'lido188'
@@ -265,7 +268,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.97.69.9:9090']
+      - targets: ['nodeset-node.example.tailnet:9090']
     relabel_configs:
       - target_label: node_name
         replacement: 'nodeset'
@@ -296,7 +299,7 @@ scrape_configs:
         - '{__name__=~"sync_.*"}'
         - '{__name__=~"peers_.*"}'
     static_configs:
-      - targets: ['100.90.57.27:9090']  # minipcamd4
+      - targets: ['ryzen7-node.example.tailnet:9090']  # minipcamd4
     relabel_configs:
       - target_label: node_name
         replacement: 'ryzen7'

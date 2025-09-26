@@ -30,62 +30,23 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "📦 Building release archives for version: $VERSION"
 
-    - name: Create release directory
-      run: |
-        mkdir -p release
-        cp *.sh release/ 2>/dev/null || true
-        cp *.service release/ 2>/dev/null || true
-        cp README.md release/
-        cp LICENSE release/ 2>/dev/null || true
-
     - name: Make scripts executable
       run: |
-        chmod +x release/*.sh
+        chmod +x display.sh
+        chmod +x scripts/*.sh
 
-    - name: Create installation script
-      run: |
-        cat > release/install.sh << 'EOF'
-        #!/bin/bash
-        # Living Room Display - Installation Script
-
-        echo "🚀 Installing Living Room Display System..."
-
-        # Create installation directory
-        INSTALL_DIR="$HOME/ethereum-grafana-cluster"
-        mkdir -p "$INSTALL_DIR"
-
-        # Copy files
-        cp * "$INSTALL_DIR/" 2>/dev/null || true
-
-        # Make scripts executable
-        chmod +x "$INSTALL_DIR"/*.sh
-
-        echo "✅ Installation complete!"
-        echo ""
-        echo "📋 Quick Start:"
-        echo "  cd $INSTALL_DIR"
-        echo "  ./start-persistent.sh"
-        echo ""
-        echo "📖 For more options, see README.md"
-        EOF
-
-        chmod +x release/install.sh
-
-    - name: Create archives
+    - name: Build release artifacts
       run: |
         VERSION="${{ steps.release_info.outputs.version }}"
-        echo "📁 Creating release archives..."
-        tar -czf "living-room-display-${VERSION}.tar.gz" release/
-        zip -r "living-room-display-${VERSION}.zip" release/
-        echo "✅ Archives created successfully"
+        ./scripts/build-release.sh "$VERSION"
 
     - name: Upload release archives
       uses: actions/upload-artifact@v4
       with:
         name: living-room-display-${{ steps.release_info.outputs.version }}
         path: |
-          living-room-display-${{ steps.release_info.outputs.version }}.tar.gz
-          living-room-display-${{ steps.release_info.outputs.version }}.zip
+          dist/living-room-display-${{ steps.release_info.outputs.version }}.tar.gz
+          dist/living-room-display-${{ steps.release_info.outputs.version }}.zip
         retention-days: 30
 
     - name: Display build summary
@@ -94,6 +55,6 @@ jobs:
         echo "🎉 Build completed successfully!"
         echo "📦 Version: $VERSION"
         echo "📁 Files created:"
-        ls -la *.tar.gz *.zip
+        ls -la dist/living-room-display-${VERSION}.tar.gz dist/living-room-display-${VERSION}.zip
         echo ""
         echo "📋 Download from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

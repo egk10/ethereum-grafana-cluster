@@ -21,7 +21,7 @@
 3. **Start the system:**
    ```bash
    cd ~/ethereum-grafana-cluster
-   ./start-persistent.sh
+   ./scripts/start-persistent.sh
    ```
 
 ### Method 2: Clone from Git Repository
@@ -34,19 +34,20 @@
 
 2. **Make scripts executable:**
    ```bash
-   chmod +x *.sh
+   chmod +x display.sh
+   chmod +x scripts/*.sh
    ```
 
 3. **Start the system:**
    ```bash
-   ./start-persistent.sh
+   ./scripts/start-persistent.sh
    ```
 
 ### Method 3: Systemd Service (Auto-start on boot)
 
 1. **Install the service:**
    ```bash
-   ./install-service.sh
+   ./scripts/install-service.sh
    ```
 
 2. **Start the service:**
@@ -83,7 +84,7 @@ wmctrl --version
 ### Basic Operation
 ```bash
 # Start the display system
-./start-persistent.sh
+./scripts/start-persistent.sh
 
 # Control commands
 ./display.sh p    # Pause switching (for editing Grafana)
@@ -115,9 +116,12 @@ systemctl --user disable living-room-switcher.service
 ## 🔧 Configuration
 
 ### Window Configuration
-Edit `display-config.sh` to customize windows:
+Copy `config/display-config.sample.sh` to `display-config.sh` and edit it to customize windows:
 
 ```bash
+# Copy the sample once per host
+cp config/display-config.sample.sh display-config.sh
+
 # Enable/disable windows
 WINDOW_1_ENABLED=true   # Grafana Dashboard
 WINDOW_2_ENABLED=true   # Nethermind UI
@@ -135,7 +139,7 @@ WINDOW_5_DURATION=60    # 1 minute
 WINDOW_6_DURATION=60    # 1 minute
 ```
 
-### Display Settings
+### Display Settings (defined in `display-config.sh`)
 ```bash
 DISPLAY=:0                    # X11 display number
 LOG_DIR="./logs"             # Log directory
@@ -180,10 +184,11 @@ DISPLAY=:0 wmctrl -l
 #### Permission issues
 ```bash
 # Make scripts executable
-chmod +x *.sh
+chmod +x display.sh
+chmod +x scripts/*.sh
 
 # Check file permissions
-ls -la *.sh
+ls -la display.sh scripts/*.sh
 ```
 
 #### Display issues
@@ -192,7 +197,7 @@ ls -la *.sh
 echo $DISPLAY
 
 # Test with explicit display
-DISPLAY=:0 ./start-persistent.sh
+DISPLAY=:0 ./scripts/start-persistent.sh
 ```
 
 ## 🛑 Emergency Controls
@@ -219,33 +224,39 @@ systemctl --user stop living-room-switcher.service
 sleep 3
 
 # Restart
-./start-persistent.sh
+./scripts/start-persistent.sh
 ```
 
 ## 📁 File Structure After Installation
 
 ```
 ~/ethereum-grafana-cluster/
-├── README.md                    # This documentation
-├── DISPLAY-CONTROL-README.md    # Detailed control guide
-├── start-persistent.sh          # Main launcher
-├── advanced-switcher.sh         # Smart window switcher
-├── display-config.sh            # Configuration
-├── control-display.sh           # Full control panel
-├── display.sh                   # Quick aliases
-├── install-service.sh           # Systemd installer
-├── living-room-switcher.service # Systemd service file
-├── logs/                        # Runtime logs (auto-created)
-└── dist/                        # Release artifacts (if built)
+├── README.md                     # This documentation
+├── DISPLAY-CONTROL-README.md     # Detailed control guide
+├── display.sh                    # Quick aliases
+├── config/
+│   └── display-config.sample.sh  # Template for local display-config.sh
+├── scripts/
+│   ├── advanced-switcher.sh      # Smart window switcher
+│   ├── control-display.sh        # Full control panel
+│   ├── install-service.sh        # Systemd installer
+│   ├── start-persistent.sh       # Main launcher (used by systemd)
+│   └── wrapper.sh                # Systemd wrapper
+├── systemd/
+│   └── living-room-switcher.service # Systemd service file
+├── logs/                         # Runtime logs (auto-created)
+└── dist/                         # Release artifacts (if built)
 ```
 
 ## 🔄 Upgrading
 
 ### From Git Repository
 ```bash
+git pull origin master
 cd ~/ethereum-grafana-cluster
 git pull origin master
-chmod +x *.sh
+chmod +x display.sh
+chmod +x scripts/*.sh
 ```
 
 ### From Release Archive
@@ -267,7 +278,7 @@ cp ~/display-config-backup.sh ~/ethereum-grafana-cluster/display-config.sh
 ### Daily Operation
 ```bash
 # Start in morning
-./start-persistent.sh
+./scripts/start-persistent.sh
 
 # Pause for maintenance
 ./display.sh p
@@ -282,7 +293,7 @@ cp ~/display-config-backup.sh ~/ethereum-grafana-cluster/display-config.sh
 ### Automated Operation
 ```bash
 # Enable systemd service for auto-start
-./install-service.sh
+./scripts/install-service.sh
 systemctl --user enable living-room-switcher.service
 
 # System will start automatically on boot
@@ -307,6 +318,6 @@ If you encounter issues:
 1. Check the logs: `tail -f logs/switcher.log`
 2. Verify requirements: `firefox --version && wmctrl --version`
 3. Test manually: `DISPLAY=:0 firefox --kiosk http://localhost:3000`
-4. Check permissions: `ls -la *.sh`
+4. Check permissions: `ls -la display.sh scripts/*.sh`
 
 For more detailed documentation, see `DISPLAY-CONTROL-README.md`.

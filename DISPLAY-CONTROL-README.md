@@ -6,18 +6,18 @@
 
 ```bash
 # 1. Pause the automatic switching
-./control-display.sh pause
+./scripts/control-display.sh pause
 
 # 2. Edit your Grafana playlist/dashboard
 # (The system won't switch windows while paused)
 
 # 3. Resume automatic switching when done
-./control-display.sh resume
+./scripts/control-display.sh resume
 ```
 
 ### Check Status Anytime:
 ```bash
-./control-display.sh status
+./scripts/control-display.sh status
 ```
 
 ### Available Commands:
@@ -44,18 +44,18 @@ When resumed:
 
 ```bash
 # Check current status
-./control-display.sh status
+./scripts/control-display.sh status
 # Output: ▶️ STATUS: Switching is ACTIVE
 
 # Pause for editing
-./control-display.sh pause
+./scripts/control-display.sh pause
 # Output: ⏸️ PAUSING window switching...
 
 # Edit your Grafana dashboard/playlist
 # (take your time, no switching will happen)
 
 # Resume when done
-./control-display.sh resume
+./scripts/control-display.sh resume
 # Output: ▶️ RESUMING window switching...
 ```
 

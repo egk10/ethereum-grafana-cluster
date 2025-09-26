@@ -16,16 +16,23 @@ mkdir -p "$OUTPUT_DIR"
 RELEASE_DIR="$OUTPUT_DIR/release"
 mkdir -p "$RELEASE_DIR"
 
-# Copy files
 echo "📋 Copying files..."
-cp *.sh "$RELEASE_DIR/" 2>/dev/null || true
-cp *.service "$RELEASE_DIR/" 2>/dev/null || true
-cp *.md "$RELEASE_DIR/" 2>/dev/null || true
-cp LICENSE "$RELEASE_DIR/" 2>/dev/null || true
+
+# Root-level entry points and docs
+cp display.sh "$RELEASE_DIR/"
+cp README.md "$RELEASE_DIR/"
+cp INSTALL.md "$RELEASE_DIR/"
+cp LICENSE "$RELEASE_DIR/"
+
+# Scripts, configs, and systemd units
+rsync -a --exclude "display-config.sh" scripts "$RELEASE_DIR/"
+rsync -a config "$RELEASE_DIR/"
+rsync -a systemd "$RELEASE_DIR/"
 
 # Make scripts executable
 echo "🔧 Making scripts executable..."
-chmod +x "$RELEASE_DIR"/*.sh
+chmod +x "$RELEASE_DIR"/display.sh
+chmod +x "$RELEASE_DIR"/scripts/*.sh
 
 # Create installation script
 echo "📦 Creating installation script..."
@@ -40,16 +47,17 @@ INSTALL_DIR="$HOME/ethereum-grafana-cluster"
 mkdir -p "$INSTALL_DIR"
 
 # Copy files
-cp * "$INSTALL_DIR/" 2>/dev/null || true
+rsync -a --exclude install.sh ./ "$INSTALL_DIR/"
 
 # Make scripts executable
-chmod +x "$INSTALL_DIR"/*.sh
+chmod +x "$INSTALL_DIR"/display.sh
+chmod +x "$INSTALL_DIR"/scripts/*.sh
 
 echo "✅ Installation complete!"
 echo ""
 echo "📋 Quick Start:"
 echo "  cd $INSTALL_DIR"
-echo "  ./start-persistent.sh"
+echo "  ./scripts/start-persistent.sh"
 echo ""
 echo "📖 For more options, see README.md"
 EOF

@@ -3,16 +3,27 @@
 # 🚀 Persistent Living Room Display Starter
 # Uses nohup to keep processes running after terminal closes
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+CONFIG_FILE="${REPO_ROOT}/display-config.sh"
+
 echo "🚀 Starting Persistent Living Room Display..."
 
 # Load configuration
-if [ -f "./display-config.sh" ]; then
-    source ./display-config.sh
-    echo "✅ Configuration loaded from display-config.sh"
+if [ -f "$CONFIG_FILE" ]; then
+    # shellcheck source=/dev/null
+    source "$CONFIG_FILE"
+    echo "✅ Configuration loaded from $(basename "$CONFIG_FILE")"
 else
-    echo "❌ Configuration file 'display-config.sh' not found!"
+    echo "❌ Configuration file 'display-config.sh' not found at $CONFIG_FILE!"
     exit 1
 fi
+
+if [[ -n "$LOG_DIR" && "$LOG_DIR" != /* ]]; then
+    LOG_DIR="${REPO_ROOT}/${LOG_DIR#./}"
+fi
+
+mkdir -p "$LOG_DIR"
 
 # Kill any existing processes
 pkill firefox
@@ -54,7 +65,7 @@ if [ $ENABLED_COUNT -eq 0 ]; then
     exit 1
 fi
 
-echo "� Starting $ENABLED_COUNT Firefox windows..."
+echo "🚀 Starting $ENABLED_COUNT Firefox windows..."
 
 # Launch enabled windows
 for i in $ENABLED_WINDOWS; do
@@ -68,10 +79,10 @@ for i in $ENABLED_WINDOWS; do
     if [ "$i" -eq 1 ]; then
         # First window in kiosk mode with main profile (preserves passwords/sync)
         # Simplified graphics settings to avoid black screen
-        DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+    DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     else
         # Subsequent windows in new window kiosk mode with main profile
-        DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --new-window --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
+    DISPLAY=$DISPLAY MOZ_DISABLE_GPU=1 nohup firefox --profile /home/egk/.mozilla/firefox/widltds1.default-release --new-window --kiosk --no-remote "$url" > "$LOG_DIR/${title,,}.log" 2>&1 &
     fi
 
     # Wait between launches
@@ -84,8 +95,8 @@ sleep 10
 
 # Start auto-switching (persistent)
 echo "🔄 Starting persistent advanced switcher..."
-cd /home/egk/ethereum-grafana-cluster
-./advanced-switcher.sh
+cd "$REPO_ROOT"
+"$SCRIPT_DIR/advanced-switcher.sh"
 
 echo "✅ Persistent living room display started!"
 echo "📋 Configuration:"

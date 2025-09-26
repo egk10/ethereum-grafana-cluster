@@ -13,3 +13,7 @@ Thumbs.db
 SOLUTION_SUMMARY.md
 .env
 logs/
+dist/
+display-config.sh
+display-config.local.sh
+

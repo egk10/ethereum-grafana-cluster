@@ -21,8 +21,11 @@ if [ -f /home/egk/.profile ]; then
     source /home/egk/.profile
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
 # Change to the correct working directory
-cd /home/egk/ethereum-grafana-cluster
+cd "$REPO_ROOT"
 
 # Execute the main script with the proper environment
-exec ./start-persistent.sh
+exec "$SCRIPT_DIR/start-persistent.sh"

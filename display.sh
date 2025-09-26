@@ -5,15 +5,17 @@
 
 cd /home/egk/ethereum-grafana-cluster
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
+
 case $1 in
     "p")
-        ./control-display.sh pause
+        "$SCRIPT_DIR/control-display.sh" pause
         ;;
     "r")
-        ./control-display.sh resume
+        "$SCRIPT_DIR/control-display.sh" resume
         ;;
     "s")
-        ./control-display.sh status
+        "$SCRIPT_DIR/control-display.sh" status
         ;;
     "start")
         echo "🚀 Starting systemd service..."
@@ -23,7 +25,7 @@ case $1 in
     "stop")
         echo "🛑 Stopping systemd service..."
         systemctl --user stop living-room-switcher.service
-        ./control-display.sh stop
+        "$SCRIPT_DIR/control-display.sh" stop
         echo "✅ Service and processes stopped."
         ;;
     "help"|*)

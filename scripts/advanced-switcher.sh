@@ -3,15 +3,28 @@
 # 🔄 Advanced Multi-Window Switcher with Custom Durations
 # Supports up to 8 windows with individual durations and enable/disable controls
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+CONFIG_FILE="${REPO_ROOT}/display-config.sh"
+
 echo "🔄 Starting advanced multi-window switcher..."
 
 # Load configuration
-if [ -f "./display-config.sh" ]; then
-    source ./display-config.sh
-    echo "✅ Configuration loaded from display-config.sh"
+if [ -f "$CONFIG_FILE" ]; then
+    # shellcheck source=/dev/null
+    source "$CONFIG_FILE"
+    echo "✅ Configuration loaded from $(basename "$CONFIG_FILE")"
 else
-    echo "❌ Configuration file 'display-config.sh' not found!"
+    echo "❌ Configuration file 'display-config.sh' not found at $CONFIG_FILE!"
     exit 1
+fi
+
+if [[ -n "$LOG_DIR" && "$LOG_DIR" != /* ]]; then
+    LOG_DIR="${REPO_ROOT}/${LOG_DIR#./}"
+fi
+
+if [ -n "$LOG_DIR" ]; then
+    mkdir -p "$LOG_DIR"
 fi
 
 # Function to log messages

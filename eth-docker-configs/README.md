@@ -14,7 +14,7 @@ This directory contains configuration files to enable Prometheus federation shar
 Copy these files to your eth-docker directory:
 
 ```bash
-# On your ryzen7 node (minipcamd4)
+# On the validator node that will share metrics
 cd ~/eth-docker
 cp /path/to/this/repo/eth-docker-configs/custom.yml .
 cp /path/to/this/repo/eth-docker-configs/prometheus-shared.yml .
@@ -39,7 +39,7 @@ SHARE_IP=0.0.0.0
 PROMETHEUS_PORT=9090
 
 # Or expose on specific interface
-SHARE_IP=100.90.57.27
+SHARE_IP=10.0.0.5
 PROMETHEUS_PORT=9090
 ```
 
@@ -56,8 +56,8 @@ docker-compose up -d
 Check that prometheus is now accessible:
 
 ```bash
-# From your opi5 monitoring node
-curl -s http://minipcamd4.velociraptor-scylla.ts.net:9090/federate?match[]=up
+# From your monitoring node
+curl -s http://validator-node.example.tailnet:9090/federate?match[]=up
 ```
 
 ## What These Files Do
@@ -76,9 +76,9 @@ curl -s http://minipcamd4.velociraptor-scylla.ts.net:9090/federate?match[]=up
 
 Once these files are deployed:
 
-1. Your ryzen7 node's prometheus will be accessible at `minipcamd4.velociraptor-scylla.ts.net:9090`
-2. The central prometheus on opi5 will automatically scrape metrics via federation
-3. Grafana dashboards will populate with ryzen7 data
+1. The validator node's Prometheus endpoint will be accessible at `validator-node.example.tailnet:9090`
+2. The central Prometheus instance can now scrape metrics via federation
+3. Grafana dashboards will populate with the new data source
 4. Hardware metrics will be available via node-exporter on port 9100
 
 ## Troubleshooting
