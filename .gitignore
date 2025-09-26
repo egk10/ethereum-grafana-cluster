@@ -16,4 +16,5 @@ logs/
 dist/
 display-config.sh
 display-config.local.sh
+prometheus/prometheus.yml
 
